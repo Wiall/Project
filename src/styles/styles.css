@@ -162,3 +162,14 @@ body {
   color: #ddd;
   background-color: rgba(0, 0, 0, 0.5); /* можна задати для кращої видимості */
 }
+
+.nav-link {
+  color: #00ffff;
+  margin-right: 1rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
