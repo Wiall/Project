@@ -8,7 +8,6 @@ const team = [
     quote: "Звичайно, ми все встигнемо... напевно...",
     image: "/sprites/artur.jpg"
   },
-  // Добавь сюда других участников команды по аналогии
 ];
 
 function TeamCard({ member }) {
