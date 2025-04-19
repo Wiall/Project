@@ -1,13 +1,15 @@
 import React from "react";
 import "./styles.css"
-import GameBoard from "../../components/GameBoard";
+import GameBoardRoma from "../../components/GameBoardRoma";
+import './CardGame.css';
+
 function GameBoardLayout() {
     return (
       <div className="game-page">
         <div className="app">
           <header className="header">
           </header>
-          <GameBoard />
+          <GameBoardRoma />
     
           <footer className="footer">
             <nav>
