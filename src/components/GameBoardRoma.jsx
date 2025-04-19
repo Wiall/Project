@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import HandRoma from './HandRoma';
-import '../styles/CardGame.css';
 
 const initialCards = [
     { id: 'card-1', content: '🂡' },
@@ -46,7 +45,6 @@ export default function GameBoardRoma() {
             const updatedHand = [...hand];
             updatedHand.splice(destination.index, 0, movedCard);
             setHand(updatedHand);
-            return;
         }
     };
 
