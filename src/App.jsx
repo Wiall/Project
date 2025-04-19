@@ -1,5 +1,6 @@
 import React from "react";
-import GameBoard from "./components/GameBoard";
+// import GameBoard from "./components/GameBoard";
+import GameBoard from "./components/GameBoardRoma";
 import "./styles/styles.css";
 
 function App() {
