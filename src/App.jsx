@@ -2,14 +2,18 @@ import React from "react";
 // import GameBoard from "./components/GameBoard";
 import GameBoard from "./components/GameBoardRoma";
 import "./styles/styles.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import About from "./pages/About/About";
+import GameBoardLayout from "./pages/Gameboard/GameBoardLayout";
 
 function App() {
   return (
-    <div className="app">
-      <header className="header">Echoes of Darkness</header>
-      <GameBoard />
-      <footer className="footer">© 2025 EchoWisp Studio</footer>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<GameBoardLayout />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Tomorrow';
+  src: url('/fonts/Tomorrow-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'HK Modular';
+  src: url('/fonts/HKModular-Regular.ttf') format('truetype');
+}
