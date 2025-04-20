@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
+body, button, a {
+  cursor: url('/sprites/sword_cursor_32x32.png') 0 0, auto;
+}
+
+.home-container {
+  background: url('/sprites/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+  font-family: 'UnifrakturCook', cursive;
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.7);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+.hero {
+  text-align: center;
+  color: #e6d3a3;
+  padding: 2rem;
+}
+
+.title-glow {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 8px #f3e9c6, 0 0 15px #5c2e00;
+  animation: glow 2s ease-in-out infinite alternate, fadeInUp 1s ease forwards;
+  opacity: 0;
+}
+
+.text-fade {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 4px #000;
+  animation: fadeInUp 1s ease forwards;
+  opacity: 0;
+  animation-delay: 0.5s;
+}
+
+.cta-button {
+  padding: 0.75rem 2rem;
+  font-size: 1.2rem;
+  background-color: #5c2e00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  animation: pulse 2s infinite, fadeInUp 1s ease forwards;
+  animation-delay: 1s;
+  opacity: 0;
+}
+
+.cta-button:hover {
+  background-color: #8a4600;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+  margin-top: 1rem;
+}
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease-out forwards;
+}
+
+/* Keyframes */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 3px #e6d3a3, 0 0 8px #5c2e00;
+  }
+  to {
+    text-shadow: 0 0 10px #f3e9c6, 0 0 20px #8a4600;
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 240, 200, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 20px rgba(255, 240, 200, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 240, 200, 0);
+  }
+}
