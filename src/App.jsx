@@ -5,6 +5,8 @@ import GameBoardLayout from "./pages/Gameboard/GameBoardLayout";
 import Home from "./pages/Home/Home";
 import PlayerHomePage from "./pages/PlayerHub/PlayerHomePage";
 import DeckBuilderPage from "./pages/DeckBuilderPage/DeckBuilderPage";
+import { RegisterPage } from "./pages/Auth/RegisterPage";
+import { LoginPage } from "./pages/Auth/LoginPage";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/game-deck" element={<DeckBuilderPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );
