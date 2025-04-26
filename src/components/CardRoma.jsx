@@ -1,12 +1,12 @@
 import React from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 
-export default function CardRoma({ card, index }) {
+export default function CardRoma({ card, index, isDisappearing  }) {
     return (
         <Draggable draggableId={card.id} index={index}>
             {(provided) => (
                 <div
-                    className={`cardd ${card.id}`}
+                    className={`cardd ${card.id} ${isDisappearing ? 'card-disappearing' : ''}`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
