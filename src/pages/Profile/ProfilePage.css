@@ -1,0 +1,430 @@
+/* ProfilePage.css */
+
+.profile-container {
+    min-height: 100vh;
+    background: url('/sprites/background.jpg') center center / cover no-repeat fixed;
+    color: #e6d3a3;
+    font-family: 'UnifrakturCook', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .profile-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px #5c2e00;
+  }
+  
+  .profile-card {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #3b1c00;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #a86d3c;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 8px #5c2e00;
+    animation: avatarPulse 4s infinite ease-in-out;
+  }
+  
+  .profile-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .email-text {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #d5c4a1;
+  }
+  
+  .bio-text {
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    color: #f0e6c0;
+  }
+  
+  .profile-xp {
+    margin-bottom: 1.5rem;
+  }
+  
+  .profile-xp span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .xp-bar {
+    background-color: #222;
+    height: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+    position: relative;
+  }
+  
+  .xp-fill {
+    background: linear-gradient(to right, #8a4600, #e6d3a3);
+    height: 100%;
+    width: 60%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .xp-shine {
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    transform: skewX(-20deg);
+    animation: shineMove 3s infinite;
+  }
+  
+  @keyframes shineMove {
+    0% {
+      left: -50%;
+    }
+    100% {
+      left: 120%;
+    }
+  }
+  
+  .profile-btn, .logout-btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-family: 'UnifrakturCook', cursive;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .profile-btn {
+    background-color: #5c2e00;
+    color: #fff8e6;
+  }
+  
+  .profile-btn:hover {
+    background-color: #8a4600;
+    box-shadow: 0 0 8px #e6d3a3;
+  }
+  
+  .logout-btn {
+    background-color: #8a2e2e;
+    color: #fff8e6;
+  }
+  
+  .logout-btn:hover {
+    background-color: #b33c3c;
+    box-shadow: 0 0 8px #e6d3a3;
+  }
+  
+  /* Modal styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeInModal 0.3s ease forwards;
+  }
+  
+  .modal-backdrop.fade-out {
+    animation: fadeOutModal 0.3s ease forwards;
+  }
+  
+  .modal {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #3b1c00;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .modal h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #f0e6c0;
+  }
+  
+  .modal input, .modal textarea {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border: 2px solid #8a4600;
+    border-radius: 8px;
+    font-family: 'UnifrakturCook', cursive;
+    background: rgba(0, 0, 0, 0.6);
+    color: #e6d3a3;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .modal input:focus, .modal textarea:focus {
+    outline: none;
+    border-color: #e6d3a3;
+    box-shadow: 0 0 10px #e6d3a3;
+  }
+  
+  textarea.bio-input {
+    min-height: 80px;
+    resize: none;
+  }
+  
+  .avatar-selection {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .avatar-option {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease;
+  }
+  
+  .avatar-option:hover {
+    transform: scale(1.1);
+  }
+  
+  .avatar-option.selected {
+    border: 2px solid #e6d3a3;
+    box-shadow: 0 0 10px #e6d3a3;
+  }
+  
+  /* Fade animations */
+  @keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeOutModal {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes pulseAvatar {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.08);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .avatar-option.selected {
+    border: 2px solid #e6d3a3;
+    box-shadow: 0 0 10px #e6d3a3;
+    animation: pulseAvatar 2s infinite;
+  }
+
+  @keyframes glowField {
+    0% {
+      box-shadow: 0 0 5px #8a4600;
+    }
+    50% {
+      box-shadow: 0 0 12px #e6d3a3;
+    }
+    100% {
+      box-shadow: 0 0 5px #8a4600;
+    }
+  }
+  
+  textarea.bio-input:focus {
+    outline: none;
+    border-color: #e6d3a3;
+    background: rgba(0, 0, 0, 0.7);
+    animation: glowField 2s infinite;
+  }
+
+  .typing-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    animation: blinkCursor 1s infinite;
+  }
+  
+  @keyframes blinkCursor {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes fadeScaleIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .fade-in {
+    animation: fadeScaleIn 0.8s ease-out forwards;
+  }
+  
+  .fade-in-delay-1 {
+    animation: fadeScaleIn 1s ease-out forwards;
+    animation-delay: 1s;
+  }
+  
+  .fade-in-delay-2 {
+    animation: fadeScaleIn 1.2s ease-out forwards;
+    animation-delay: 2s;
+  }
+  
+  .fade-in-delay-3 {
+    animation: fadeScaleIn 1.4s ease-out forwards;
+    animation-delay: 3s;
+  }
+  
+
+  .profile-avatar.default {
+    border: 3px solid #a86d3c;
+  }
+  
+  .profile-avatar.gold {
+    border: 3px solid gold;
+    box-shadow: 0 0 12px gold;
+  }
+  
+  .profile-avatar.silver {
+    border: 3px solid silver;
+    box-shadow: 0 0 12px silver;
+  }
+  
+  .profile-avatar.dark {
+    border: 3px solid #5c2e00;
+    box-shadow: 0 0 15px #3b1c00;
+  }
+  
+  .border-selection {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  
+  .border-option {
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'UnifrakturCook', cursive;
+    color: #e6d3a3;
+    transition: all 0.3s ease;
+  }
+  
+  .border-option:hover {
+    background: rgba(255, 240, 200, 0.1);
+    border-color: #8a4600;
+  }
+  
+  .border-option.selected {
+    background: rgba(255, 240, 200, 0.2);
+    border-color: #e6d3a3;
+    box-shadow: 0 0 8px #e6d3a3;
+  }
+
+  
+  @keyframes avatarPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes borderGlow {
+    0% { box-shadow: 0 0 5px currentColor; }
+    50% { box-shadow: 0 0 15px currentColor; }
+    100% { box-shadow: 0 0 5px currentColor; }
+  }
+
+  @keyframes buttonBreath {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes textGlow {
+    0% { text-shadow: 0 0 5px #8a4600; }
+    50% { text-shadow: 0 0 12px #e6d3a3; }
+    100% { text-shadow: 0 0 5px #8a4600; }
+  }
+  
+  @keyframes softPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.85; }
+    100% { opacity: 1; }
+  }
+  
+  @keyframes subtleGlow {
+    0% { text-shadow: 0 0 3px #a86d3c; }
+    50% { text-shadow: 0 0 6px #d5c4a1; }
+    100% { text-shadow: 0 0 3px #a86d3c; }
+  }
+  
+
+  .profile-avatar.gold,
+  .profile-avatar.silver,
+  .profile-avatar.dark {
+   animation: avatarPulse 4s infinite ease-in-out, borderGlow 3s infinite ease-in-out;
+  }
+
+  .profile-btn, .logout-btn {
+    animation: buttonBreath 5s infinite ease-in-out;
+  }
+  .username-glow {
+    animation: textGlow 4s infinite ease-in-out;
+  }
+  
+  .email-glow {
+    animation: subtleGlow 5s infinite ease-in-out;
+  }
+  
+  .bio-pulse {
+    animation: softPulse 6s infinite ease-in-out;
+  }
+  
+  .level-pulse {
+    animation: textGlow 3s infinite ease-in-out;
+  }
