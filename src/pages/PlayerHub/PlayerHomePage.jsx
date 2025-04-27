@@ -9,10 +9,10 @@ export default function PlayerHomePage() {
       <header className="player-header">
         <div className="logo">Echoes of Darkness</div>
         <nav className="menu">
-        <Link to="/profile"><button>Profile</button></Link>
+          <Link to="/profile"><button>Profile</button></Link>
           <Link to="/game-deck"><button>Deck</button></Link>
           <Link to="/game-room"><button>Play</button></Link>
-          <button>Shop</button>
+          <Link to="/shop"><button>Shop</button></Link>
         </nav>
       </header>
 

@@ -1,0 +1,364 @@
+/* ShopPage.css */
+button {
+    font-family: 'UnifrakturCook', cursive;
+  }
+/* Загальні стилі */
+.shop-container {
+    min-height: 100vh;
+    background: url('/sprites/shop-background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #e6d3a3;
+    font-family: 'UnifrakturCook', cursive;
+  }
+  
+  .gold-display {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .gold-display img {
+    width: 24px;
+    margin-left: 8px;
+  }
+  
+  /* Хедер */
+  .shop-header {
+    text-align: center;
+    padding: 2rem 0 1rem;
+  }
+  
+  .shop-header h1 {
+    font-size: 3rem;
+    text-shadow: 0 0 10px #5c2e00;
+  }
+  
+  /* Сітка продуктів */
+  .product-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  /* Карточки паків */
+  .product-card {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    border: 1px solid #5c2e00;
+    border-radius: 12px;
+    width: 260px;
+    text-align: center;
+    box-shadow: 0 0 10px #000;
+    position: relative;
+  }
+  
+  .product-top {
+    position: relative;
+  }
+  
+  .product-image {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .info-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #5c2e00;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .info-button:hover {
+    background: #8a4600;
+  }
+  
+  img.coin-icon {
+    width: 24px;
+    margin-right: 8px;
+  }
+  
+  .price {
+    margin: 1rem 0;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .buy-btn {
+    background: #5c2e00;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .buy-btn:hover {
+    background: #8a4600;
+  }
+  
+  /* Модалка */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 10, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid #5c2e00;
+    text-align: center;
+    width: fit-content;
+    max-width: 90vw;    /* не вийде за 90% вікна */
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Анімації відкриття */
+  .opening-animation p {
+    font-size: 1.8rem;
+    color: #f0e6c0;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { text-shadow: 0 0 5px #8a4600; }
+    50% { text-shadow: 0 0 15px #f0e6c0; }
+    100% { text-shadow: 0 0 5px #8a4600; }
+  }
+  
+  .magic-explosion {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255,240,200,0.8) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    margin: 2rem auto;
+    animation: explode 1s ease forwards;
+  }
+  
+  @keyframes explode {
+    from {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1.5);
+      opacity: 1;
+    }
+  }
+  
+  /* Відображення картки після відкриття */
+  .single-card-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .drop-card-image {
+    width: 200px;
+    margin-bottom: 1rem;
+    animation: floatIn 0.7s ease forwards;
+  }
+  
+  @keyframes floatIn {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Рідкість */
+  .rarity-text {
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .rarity-text.common {
+    color: #c0c0c0;
+    text-shadow: 0 0 5px #777;
+  }
+  
+  .rarity-text.rare {
+    color: #4aa3df;
+    text-shadow: 0 0 5px #4aa3df;
+  }
+  
+  .rarity-text.epic {
+    color: #9b59b6;
+    text-shadow: 0 0 8px #9b59b6;
+  }
+  
+  .rarity-text.legendary {
+    color: #f1c40f;
+    text-shadow: 0 0 10px #f39c12, 0 0 20px #f39c12;
+  }
+  
+  /* Кнопка Next */
+  .next-btn {
+    background: #5c2e00;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .next-btn:hover {
+    background-color: #8a4600;
+  }
+  
+  /* Фінальна стрічка */
+  .cards-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    overflow-x: auto;
+  }
+  
+  /* Одна картка у фінальному вікні */
+  .card-drop {
+    flex: 0 0 auto;
+    width: 160px;
+    height: 260px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.75rem;
+    border-radius: 12px;
+    border: 1px solid #5c2e00;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    opacity: 0;
+    animation: appear 0.5s ease forwards;
+  }
+  
+  @keyframes appear {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Зображення картки */
+  .drop-card-image-small {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+  }
+  
+  /* Підпис під карткою */
+  .card-drop .rarity-text {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+  
+  /* Легка підсвітка при наведенні */
+  .card-drop:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Стилізація вікна шансів */
+  .drop-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .drop-list li {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(92, 46, 0, 0.3);
+    border-radius: 8px;
+    text-align: left;
+    color: #e6d3a3;
+    text-shadow: 0 0 5px #5c2e00;
+    font-family: 'UnifrakturCook', cursive;
+    font-weight: bold;
+  }
+  
+  .drop-list li span {
+    color: #f0e6c0;
+    margin-right: 10px;
+  }
+  
+  /* Заголовок модалки */
+  .modal-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #f0e6c0;
+    text-shadow: 0 0 8px #8a4600;
+  }
+  
+  .cancel-btn {
+    background: #5c2e00;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    color: #fff8e6;
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #8a4600;
+  }
+  

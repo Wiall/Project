@@ -8,6 +8,7 @@ import DeckBuilderPage from "./pages/DeckBuilderPage/DeckBuilderPage";
 import { RegisterPage } from "./pages/Auth/RegisterPage";
 import { LoginPage } from "./pages/Auth/LoginPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import ShopPage from "./pages/Shop/ShopPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/game-page" element={<PlayerHomePage />} />
         <Route path="/game-deck" element={<DeckBuilderPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/shop" element={<ShopPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<RegisterPage />} />
