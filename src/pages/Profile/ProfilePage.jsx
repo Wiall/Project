@@ -1,5 +1,6 @@
 // src/pages/ProfilePage.jsx
 import React, { useState } from "react";
+import Header from "../../components/Header/Header";
 import "./ProfilePage.css";
 
 const availableAvatars = [
@@ -67,7 +68,9 @@ export default function ProfilePage() {
   
 
   return (
-    <div className="profile-container">
+    <div className="profile-page-wrapper">
+      <Header />
+      <div className="profile-container">
       <h2>Profile</h2>
       <div className="profile-card">
         <img src={avatar} alt="avatar" className={`profile-avatar ${selectedBorder}`} />
@@ -149,5 +152,7 @@ export default function ProfilePage() {
         </div>
       )}
     </div>
-  );
+
+    </div>
+      );
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Header from "../../components/Header/Header";
 import "./DeckBuilderPage.css";
 
 const initialCards = [
@@ -31,6 +32,7 @@ export default function DeckBuilderPage() {
   
     return (
       <div className="deck-builder">
+        <Header />
         <header className="deck-header">
           <h1>Deck Builder</h1>
           <p>Click a card to add it to your deck or return it.</p>

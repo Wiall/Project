@@ -12,53 +12,6 @@
     margin: 0;
   }
   
-  .player-header {
-    background: rgba(0, 0, 0, 0.75);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 2px solid #5c2e00;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-  }
-  
-  .logo {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #f0e6c0;
-    text-shadow: 0 0 10px #8a4600;
-  }
-  
-  .menu button {
-    background: transparent;
-    border: 1px solid #a86d3c;
-    color: #e6d3a3;
-    font-size: 1rem;
-    margin-left: 1rem;
-    padding: 0.4rem 1rem;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px #8a4600;
-    animation: glow-button 1.8s ease-in-out infinite alternate;
-  }
-  
-  
-  .menu button:hover {
-    background-color: #5c2e00;
-    color: #fff;
-    box-shadow: 0 0 8px #e6d3a3;
-  }
-
-  @keyframes glow-button {
-    from {
-      box-shadow: 0 0 5px #8a4600;
-    }
-    to {
-      box-shadow: 0 0 15px #e6d3a3;
-    }
-  }
-  
-  
   .player-content.two-column-layout {
     display: flex;
     justify-content: space-between;
