@@ -2,10 +2,14 @@
 button {
     font-family: 'UnifrakturCook', cursive;
   }
+
+.shop-wrapper {
+  background: url('/sprites/shop-background.png') no-repeat center center fixed;
+}
+
 /* Загальні стилі */
 .shop-container {
-    min-height: 100vh;
-    background: url('/sprites/shop-background.png') no-repeat center center fixed;
+    min-height: 88vh;
     background-size: cover;
     color: #e6d3a3;
     font-family: 'UnifrakturCook', cursive;
@@ -26,11 +30,10 @@ button {
   /* Хедер */
   .shop-header {
     text-align: center;
-    padding: 2rem 0 1rem;
   }
   
   .shop-header h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     text-shadow: 0 0 10px #5c2e00;
   }
   
@@ -40,7 +43,7 @@ button {
     justify-content: center;
     flex-wrap: wrap;
     gap: 2rem;
-    padding: 2rem;
+    padding: 1rem;
   }
   
   /* Карточки паків */
@@ -75,7 +78,6 @@ button {
     width: 26px;
     height: 26px;
     font-weight: bold;
-    cursor: pointer;
     transition: background 0.3s;
   }
   
@@ -103,7 +105,6 @@ button {
     border-radius: 6px;
     color: #fff;
     font-size: 1.2rem;
-    cursor: pointer;
     transition: background 0.3s;
   }
   
@@ -240,7 +241,6 @@ button {
     color: #fff;
     font-size: 1.2rem;
     margin-top: 1rem;
-    cursor: pointer;
     transition: background-color 0.3s;
   }
   

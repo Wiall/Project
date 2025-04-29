@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ShopPage.css";
+import Header from "../../components/Header/Header";
 
 export default function ShopPage() {
   const [gold, setGold] = useState(1200);
@@ -121,7 +122,9 @@ export default function ShopPage() {
   }
 
   return (
-    <div className="shop-container">
+    <div className="shop-wrapper">
+      <Header />
+      <div className="shop-container">
       <div className="gold-display">
         Gold: {gold} <img src="/sprites/coin.png" alt="coin" className="coin-icon animated-coin" />
       </div>
@@ -209,5 +212,7 @@ export default function ShopPage() {
         </div>
       )}
     </div>
+    </div>
+    
 );
 }

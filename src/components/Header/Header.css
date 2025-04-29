@@ -1,0 +1,74 @@
+.player-header {
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 2px solid #5c2e00;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.logo {
+  font-size: 2.4rem;
+  font-family: 'UnifrakturCook', cursive;
+  color: #f0e6c0;
+  text-shadow: 
+    0 0 8px #8a4600,
+    0 0 12px #f0e6c0;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+}
+
+.menu-link {
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.menu-link button {
+  background: transparent;
+  border: 1px solid #a86d3c;
+  color: #e6d3a3;
+  font-size: 1rem;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  box-shadow: 0 0 10px #8a4600;
+  animation: glow-button 1.8s ease-in-out infinite alternate;
+  transition: all 0.3s ease;
+  font-family: 'UnifrakturCook', cursive;
+}
+
+.menu-link button:hover {
+  background-color: #5c2e00;
+  color: #fff;
+  box-shadow: 0 0 8px #e6d3a3;
+}
+
+.menu-link.active button {
+  background-color: #5c2e00;
+  color: #fff;
+  border-color: #f0e6c0;
+  box-shadow: 0 0 12px #f0e6c0;
+}
+
+@keyframes glow-button {
+  from {
+    box-shadow: 0 0 5px #8a4600;
+  }
+  to {
+    box-shadow: 0 0 15px #e6d3a3;
+  }
+}

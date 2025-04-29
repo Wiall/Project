@@ -1,15 +1,26 @@
 /* ProfilePage.css */
+.profile-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: url('/sprites/background.jpg') center center / cover no-repeat fixed;
+}
+
 
 .profile-container {
-    min-height: 100vh;
-    background: url('/sprites/background.jpg') center center / cover no-repeat fixed;
-    color: #e6d3a3;
-    font-family: 'UnifrakturCook', cursive;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-  }
+  flex: 1;
+  color: #e6d3a3;
+  font-family: 'UnifrakturCook', cursive;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  padding-top: 1rem; /* Уменьшаем отступ сверху */
+  height: calc(100vh - 60px); /* Вычитаем высоту хедера */
+  overflow-y: auto; /* Добавляем прокрутку если контент не помещается */
+  box-sizing: border-box;
+}
+
   
   .profile-container h2 {
     font-size: 2.5rem;
@@ -117,7 +128,6 @@
     font-family: 'UnifrakturCook', cursive;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
   
@@ -214,7 +224,6 @@
     border-radius: 50%;
     border: 2px solid transparent;
     object-fit: cover;
-    cursor: pointer;
     transition: transform 0.3s ease, border 0.3s ease;
   }
   
@@ -349,7 +358,6 @@
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid transparent;
     border-radius: 8px;
-    cursor: pointer;
     font-family: 'UnifrakturCook', cursive;
     color: #e6d3a3;
     transition: all 0.3s ease;
