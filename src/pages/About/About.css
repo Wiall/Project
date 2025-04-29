@@ -4,7 +4,12 @@
   color: white;
   min-height: 100vh;
   padding: 2rem 8rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* <-- вот здесь фиксировано 2 карточки */
+  gap: 2rem;
+  justify-content: center;
   font-family: sans-serif;
+  background-color: #000;
   background-image:
     linear-gradient(90deg, rgba(162, 0, 255, 0.5) 1px, transparent 1px),
     linear-gradient(rgba(162, 0, 255, 0.5) 1px, transparent 1px);
@@ -12,12 +17,6 @@
   background-size: 50px 50px;
 }
 
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  justify-content: center;
-}
 
 .about-card {
   display: flex;
@@ -87,119 +86,4 @@
   font-size: 18px;
   letter-spacing: 1px;
 }
-
-.project-description {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12rem;
-  margin-bottom: 20rem;
-  padding: 0 2rem;
-}
-
-.project-description h1 {
-  margin-bottom: 13rem;
-  margin-top: 10rem;
-  position: relative;
-  font-size: 6rem;
-  text-align: center;
-  color: white;
-  font-family: 'Tomorrow', sans-serif;
-  letter-spacing: 2px;
-  animation: glitch 2s infinite;
-}
-
-@keyframes glitch {
-  0% { text-shadow: 3.5px 3.5px #a200ff, -2px -2px #00ffff; }
-  20% { text-shadow: -3.5px 3.5px #a200ff, 2px -2px #00ffff; }
-  40% { text-shadow: 3.5px -3.5px #a200ff, -2px 2px #00ffff; }
-  60% { text-shadow: -3.5px -3.5px #a200ff, 2px 2px #00ffff; }
-  80% { text-shadow: 3.5px 3.5px #a200ff, -2px -2px #00ffff; }
-  100% { text-shadow: 0 0 10px #a200ff88, 0 0 20px #00ffff66; }
-}
-
-
-.project-description p {
-  font-size: 1.3rem;
-  line-height: 1.8;
-  color: #eee;
-}
-
-.section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.left-text {
-  flex-direction: row;
-}
-
-.right-text {
-  flex-direction: row-reverse;
-}
-
-.section .text {
-  flex: 1;
-  color: white;
-  font-size: 16rem;
-}
-
-.section .image img {
-  width: 200px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #a200ff55;
-}
-
-.section-divider {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin: 5rem 0 3rem;
-  position: relative;
-}
-
-.section-divider h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.4rem;
-  color: #a200ff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 1rem;
-}
-
-.section-divider::after {
-  content: '';
-  display: block;
-  width: 150px;
-  height: 3px;
-  background: linear-gradient(to right, #a200ff, #fff, #a200ff);
-  margin: 0 auto;
-  border-radius: 2px;
-}
-
-.project-lead, .project-desc {
-  font-size: 1.5rem;
-  line-height: 2.5rem;
-  color: #ddd;
-  margin-bottom: 1rem;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.highlight {
-  color: #fff;
-  background: linear-gradient(90deg, #a200ff, #ff00cc);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: bold;
-}
-
-.emphasis {
-  color: #a200ff;
-  font-weight: bold;
-  text-shadow: 0 0 5px #a200ff55;
-}
-
 
