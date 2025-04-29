@@ -55,7 +55,7 @@ body, button, a {
   border: none;
   border-radius: 8px;
   transition: background-color 0.3s ease;
-  animation: pulse 2s infinite, fadeInUp 1s ease forwards;
+  animation: pulse_btn 2s infinite, fadeInUp 1s ease forwards;
   animation-delay: 1s;
   opacity: 0;
 }
@@ -64,8 +64,8 @@ body, button, a {
   background-color: #8a4600;
 }
 
-.pulse {
-  animation: pulse 2s infinite;
+.pulse_btn {
+  animation: pulse_btn 2s infinite;
   margin-top: 1rem;
 }
 .fade-up {
@@ -95,7 +95,7 @@ body, button, a {
     text-shadow: 0 0 10px #f3e9c6, 0 0 20px #8a4600;
   }
 }
-@keyframes pulse {
+@keyframes pulse_btn {
   0% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(255, 240, 200, 0.4);
