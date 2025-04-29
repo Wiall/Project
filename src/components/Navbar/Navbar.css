@@ -1,6 +1,11 @@
 /* Navbar.css */
 
 .navbar {
+    position: fixed; /* Добавлено: зафиксировать вверху */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     background: black;
     padding: 1rem 5rem;
     display: flex;
