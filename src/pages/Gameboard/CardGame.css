@@ -15,7 +15,7 @@
 
 .hand-container {
     display: flex;
-    gap: 20px;
+    /*gap: 20px;*/
     position: relative;
 }
 
@@ -34,16 +34,20 @@
 
 .drop-area {
     position: relative;
-    height: 300px;
+    height: 100px;
     width: 100%;
     border: 2px dashed #ccc;
     border-radius: 10px;
 }
 
+.drop-area.borderless {
+    border: none;
+}
+
 
 .hand-zone {
     background-color: rgba(0, 0, 0, 0.3);
-    /*border: 2px solid #fff;*/
+    border: 2px solid #fff;
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -55,19 +59,24 @@
 
 .cardd {
     transform: rotate(var(--angle));
-    transform-origin: bottom center;
-    width: 200px;
-    height: 300px;
+    transform-origin: center center;
+    width: 60px;
+    height: 100px;
     background-color: #f8b400;
     border-radius: 8px;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-    font-size: 8rem;
+    font-size: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s ease;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+.cardd:not(:last-child) {
+    margin-right: 20px;
+}
+
 .cards {
     display: flex;
     gap: 20px;
@@ -76,4 +85,37 @@
 
 .cards-container {
     display: flex;
+}
+
+.card-appearing {
+    animation: fadeInScale 0.5s forwards;
+}
+
+.card-disappearing {
+    animation: fadeOutScale 0.5s forwards;
+}
+
+@keyframes fadeInScale {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+        width: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutScale {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0);
+        width: 0;
+        opacity: 0;
+        margin-right: 0;
+    }
 }

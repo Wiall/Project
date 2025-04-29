@@ -1,0 +1,165 @@
+/* PlayerHomePage.css */
+
+.player-home {
+    min-height: 100vh;
+    background: url('/sprites/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #e6d3a3;
+    font-family: 'UnifrakturCook', cursive;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .player-content.two-column-layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 2rem;
+  }
+  
+  .left-column,
+  .right-column {
+    flex: 1;
+    min-width: 320px;
+    max-width: 48%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .profile-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 1rem 2rem;
+    border-left: 4px solid #a86d3c;
+    border-radius: 10px;
+    max-width: 100%;
+    box-shadow: 0 0 10px rgba(255, 240, 200, 0.1);
+  }
+  
+  .profile-block img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px #8a4600;
+  }
+  
+  .welcome-block {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.5rem 2rem;
+    border-left: 4px solid #a86d3c;
+    box-shadow: 0 0 10px rgba(255, 240, 200, 0.1);
+    border-radius: 10px;
+  }
+  
+  .welcome-block h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .welcome-block p {
+    font-size: 1rem;
+  }
+  
+  .news-block {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px #3b1c00;
+    max-width: 100%;
+  }
+  
+  .news-block h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #8a4600;
+    padding-bottom: 0.5rem;
+  }
+  
+  .news-block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .news-block li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .season-block {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px #3b1c00;
+  }
+  
+  .progress-bar {
+    background-color: #222;
+    height: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+  }
+  
+  .progress {
+    background: linear-gradient(to right, #8a4600, #e6d3a3);
+    height: 100%;
+    transition: width 0.5s ease;
+  }
+  
+  .daily-reward {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 240, 200, 0.05);
+  }
+  
+  .daily-reward button {
+    margin-top: 0.5rem;
+    background-color: #5c2e00;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .daily-reward button:hover {
+    background-color: #a86d3c;
+  }
+  
+  .player-footer {
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.75);
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.95rem;
+    border-top: 1px solid #5c2e00;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .player-footer p {
+    color: #e6d3a3;
+    margin: 0;
+  }
+  
+  .player-footer a {
+    color: #f0b97d;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .player-footer a:hover {
+    color: #fff;
+    text-shadow: 0 0 5px #f0b97d;
+  }
