@@ -11,7 +11,10 @@ export default function CardRoma({ card, index, isDisappearing  }) {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                 >
-                    {card.content}
+
+                    <img src={`${card.content}.png`} alt=""/>
+                    <span className="stat-1">10</span>
+                    <span className="stat-2">10</span>
                 </div>
             )}
         </Draggable>

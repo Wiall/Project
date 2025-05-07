@@ -22,7 +22,7 @@
 .app {
   text-align: center;
   width: 96vw; /* 100% ширини viewport */
-  height: 86vh; /* 100% висоти viewport */
+  height: 100vh; /* 100% висоти viewport */
   background: rgba(0, 0, 0, 0.4); /* Темний прозорий фон */
   color: white;
   padding: 20px;
