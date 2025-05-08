@@ -3,10 +3,10 @@ import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import HandRoma from './HandRoma';
 
 const initialCards = [
-    { id: 'card-1', content: '🂡' },
-    { id: 'card-2', content: '🂢' },
-    { id: 'card-3', content: '🂣' },
-    { id: 'card-4', content: '🂤' },
+    { id: 'card-1', content: 'card-1' },
+    { id: 'card-2', content: 'card-2' },
+    { id: 'card-3', content: 'card-3' },
+    { id: 'card-4', content: 'card-4' },
 ];
 
 export default function GameBoardRoma() {
