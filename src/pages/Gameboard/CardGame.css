@@ -1,6 +1,6 @@
 body {
-  overflow: hidden; /* Прибирає прокрутку */
-  height: 100vh; /* Фіксує висоту */
+  overflow: hidden;
+  height: 100vh;
 }
 
 .blocks-container {
@@ -126,7 +126,7 @@ body {
 }
 
 .ai-card {
-  background: #f55555 !important; /* Додаємо !important, щоб переконатися, що стиль не перезаписується */
+  background: #f55555 !important;
   border: 2px solid #d33;
   box-shadow: 0px 4px 10px rgba(255, 85, 85, 0.5);
 }
@@ -137,6 +137,12 @@ body {
 
 .card-appearing {
   animation: fadeInScale 0.5s forwards;
+}
+
+.selected-card-preview {
+  height: 500px;
+  width: 350px;
+  border-radius: 10px;
 }
 
 .make-move {
