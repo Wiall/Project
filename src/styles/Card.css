@@ -1,0 +1,90 @@
+body {
+  overflow: hidden; /* Прибирає прокрутку */
+  height: 100vh; /* Фіксує висоту */
+}
+
+.my-card {
+  position: relative;
+}
+
+.my-card .card-stats {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: auto;
+}
+
+.my-card .card-stat {
+  font-size: 16px;
+  min-width: 30px;
+  min-height: 30px;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-stats {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.card-stat {
+  position: absolute;
+  font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: white;
+  min-width: 40px;
+  text-align: center;
+}
+
+.stat-hp {
+  background-color: rgba(255, 0, 0, 0.6); /* червоне тло */
+  border: 1px solid #aa0000;
+  bottom: 14vh;
+}
+
+.stat-atk {
+  background-color: rgba(0, 0, 255, 0.6); /* синє тло */
+  border: 1px solid #0000aa;
+  bottom: 2vh;
+  left: 15vh;
+}
+
+.blocks-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Розтягнути на всю ширину екрану */
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.cardd {
+  width: 100px; /* Ширина картки */
+  height: 150px; /* Висота картки */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+  border-radius: 5px;
+  margin: 5px;
+  box-sizing: border-box;
+}

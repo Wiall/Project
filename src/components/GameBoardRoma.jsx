@@ -1,174 +1,179 @@
-import React, { useState } from 'react';
-import { DragDropContext, Droppable } from '@hello-pangea/dnd';
-import HandRoma from './HandRoma';
+import React, { useState } from "react";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import HandRoma from "./HandRoma";
+import HandAI from "./HandAI";
+//import { BoardState } from "../bot/BoardState";
+import { generateMoves } from "../bot/MoveGenerator";
 
 const initialCards = [
-    { id: 'card-1', content: 'card-1' },
-    { id: 'card-2', content: 'card-2' },
-    { id: 'card-3', content: 'card-3' },
-    { id: 'card-4', content: 'card-4' },
+  { id: "card-1", content: "card-1" },
+  { id: "card-2", content: "card-2" },
+  { id: "card-3", content: "card-3" },
+  { id: "card-4", content: "card-4" },
+];
+
+const initialCardsAI = [
+  { id: "card-1AI", content: "card-1", isAiCard: true },
+  { id: "card-2AI", content: "card-2", isAiCard: true },
+  { id: "card-3AI", content: "card-3", isAiCard: true },
+  { id: "card-4AI", content: "card-4", isAiCard: true },
+  { id: "card-5AI", content: "card-5", isAiCard: true },
 ];
 
 export default function GameBoardRoma() {
-    const [hand, setHand] = useState(initialCards);
-    const [cards1, setCards1] = useState([]);
-    const [cards2, setCards2] = useState([]);
-    const [cards3, setCards3] = useState([]);
-    const [cards4, setCards4] = useState([]);
-    const [animatingCard, setAnimatingCard] = useState(null); // Карта, яка анімується
+  const [hand, setHand] = useState(initialCards);
+  const [handAi, setHandAi] = useState(initialCardsAI);
+  const [cards1, setCards1] = useState([]);
+  const [cards2, setCards2] = useState([]);
+  const [cards3, setCards3] = useState([]);
+  const [cards4, setCards4] = useState([]);
 
-    const onDragEnd = (result) => {
-        const { source, destination } = result;
-        if (!destination) return;
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+    if (!destination) return;
 
-        // Визначаємо звідки перетягуємо карту
-        const sourceList =
-            source.droppableId === 'hand' ? hand :
-                source.droppableId === 'cards-1' ? cards1 :
-                    source.droppableId === 'cards-2' ? cards2 :
-                        source.droppableId === 'cards-3' ? cards3 :
-                            source.droppableId === 'cards-4' ? cards4 :
-                                [];
+    const sourceList = source.droppableId === "hand" ? hand : [];
+    const movedCard = sourceList[source.index];
 
-        const movedCard = sourceList[source.index];
-        const newSourceList = [...sourceList];
-        newSourceList.splice(source.index, 1); // Видаляємо карту з початкового місця
+    if (!movedCard) return;
 
-        // Переміщуємо карту у відповідний блок
-        if (source.droppableId === 'hand' && destination.droppableId === 'drop-area-1') {
-            setHand(newSourceList);
-            setCards1((prev) => [...prev, movedCard]);
-        }
+    const targetList =
+      destination.droppableId === "drop-area-1" ? "cards1" : "cards2";
+    if (!targetList) return;
 
-        if (source.droppableId === 'hand' && destination.droppableId === 'drop-area-2') {
-            setHand(newSourceList);
-            setCards2((prev) => [...prev, movedCard]);
-        }
-
-        if (source.droppableId === 'hand' && destination.droppableId === 'drop-area-3') {
-            setHand(newSourceList);
-            setCards3((prev) => [...prev, movedCard]);
-        }
-
-        if (source.droppableId === 'hand' && destination.droppableId === 'drop-area-4') {
-            setHand(newSourceList);
-            setCards4((prev) => [...prev, movedCard]);
-        }
-    };
-
-    const handleFakeDrop = (targetBlock) => {
-        if (hand.length === 0) return;
-
-        const movedCard = hand[0];
-        setAnimatingCard({ ...movedCard, targetBlock }); // Запускаємо анімацію
-
-        // Через 500ms видаляємо карту з руки і додаємо у блок
-        setTimeout(() => {
-            if (targetBlock === 'cards-3') {
-                setCards3((prev) => [...prev, movedCard]);
-            } else if (targetBlock === 'cards-4') {
-                setCards4((prev) => [...prev, movedCard]);
-            }
-            setHand((prev) => prev.slice(1)); // Видаляємо з руки
-            setAnimatingCard(null);
-        }, 500);
-    };
-
-    return (
-        <div className="game-container">
-            <DragDropContext onDragEnd={onDragEnd}>
-                {/* Блоки 3 і 4 (кнопки) */}
-                <div className="blocks-container">
-                    <div className="cards">
-                        {cards3.map((card) => (
-                            <div className={`cardd ${card.id}`} key={card.id}>
-                                {card.content}
-                            </div>
-                        ))}
-                        {/* Анімована копія карти */}
-                        {animatingCard?.targetBlock === 'cards-3' && (
-                            <div className="cardd card-appearing" key={`anim-${animatingCard.id}`}>
-                                {animatingCard.content}
-                            </div>
-                        )}
-                    </div>
-                    <div className="drop-area borderless">
-                        <button onClick={() => handleFakeDrop('cards-3')}>
-                            Додати карту в блок 3
-                        </button>
-                    </div>
-                </div>
-
-                <div className="blocks-container">
-                    <div className="cards">
-                        {cards4.map((card) => (
-                            <div className={`cardd ${card.id}`} key={card.id}>
-                                {card.content}
-                            </div>
-                        ))}
-                        {/* Анімована копія карти */}
-                        {animatingCard?.targetBlock === 'cards-4' && (
-                            <div className="cardd card-appearing" key={`anim-${animatingCard.id}`}>
-                                {animatingCard.content}
-                            </div>
-                        )}
-                    </div>
-                    <div className="drop-area borderless">
-                        <button onClick={() => handleFakeDrop('cards-4')}>
-                            Додати карту в блок 4
-                        </button>
-                    </div>
-                </div>
-
-                {/* Блоки 1 і 2 (можна перетягувати) */}
-                <div className="blocks-container">
-                    <div className="cards">
-                        {cards1.map((card) => (
-                            <div className={`cardd ${card.id}`} key={card.id}>
-                                {card.content}
-                            </div>
-                        ))}
-                    </div>
-                    <Droppable droppableId="drop-area-1" direction="horizontal">
-                        {(provided) => (
-                            <div
-                                className="drop-area"
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </div>
-
-                <div className="blocks-container">
-                    <div className="cards">
-                        {cards2.map((card) => (
-                            <div className={`cardd ${card.id}`} key={card.id}>
-                                {card.content}
-                            </div>
-                        ))}
-                    </div>
-                    <Droppable droppableId="drop-area-2" direction="horizontal">
-                        {(provided) => (
-                            <div
-                                className="drop-area"
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </div>
-
-                {/* Рука з картами (карта, яка зникає) */}
-                <HandRoma
-                    hand={hand}
-                    disappearingCardId={animatingCard?.id}
-                />
-            </DragDropContext>
-        </div>
+    // Зникає одразу після відпускання
+    setHand((prev) =>
+      prev.map((card) =>
+        card.id === movedCard.id ? { ...card, isDisappearing: true } : card
+      )
     );
+
+    setTimeout(() => {
+      // Додаємо карту до цільового масиву з анімацією з'явлення
+      setHand((prev) => prev.filter((card) => card.id !== movedCard.id));
+      setCards1((prev) =>
+        targetList === "cards1"
+          ? [...prev, { ...movedCard, isAppearing: true }]
+          : prev
+      );
+      setCards2((prev) =>
+        targetList === "cards2"
+          ? [...prev, { ...movedCard, isAppearing: true }]
+          : prev
+      );
+    }, 100); // Час зникнення
+  };
+
+  const playAiMove = () => {
+    if (handAi.length === 0) return;
+
+    const movedCard = { ...handAi[0], isAiCard: true }; // Додаємо прапорець
+    const targetBlock = cards3.length <= cards4.length ? "cards3" : "cards4";
+
+    setHandAi((prev) => prev.slice(1));
+
+    if (targetBlock === "cards3") setCards3((prev) => [...prev, movedCard]);
+    if (targetBlock === "cards4") setCards4((prev) => [...prev, movedCard]);
+  };
+
+  return (
+    <div className="game-container">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <HandAI aiHand={handAi} />
+
+        {/* 🔹 4 окремі ряди для карт */}
+        <div
+          className="blocks-wrapper"
+          style={{ position: "relative", top: "50px" }}
+        >
+          {/* Ряд ШІ 1 */}
+          <div
+            className="drop-area"
+            style={{
+              border: "2px dashed #888",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div className="cards">
+              {cards3.map((card) => (
+                <div className={`cardd ${card.id} ai-card`} key={card.id}>
+                  {card.content}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Ряд ШІ 2 */}
+          <div
+            className="drop-area"
+            style={{
+              border: "2px dashed #888",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div className="cards">
+              {cards4.map((card) => (
+                <div className={`cardd ${card.id} ai-card`} key={card.id}>
+                  {card.content}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Ряд гравця 1 */}
+          <Droppable droppableId="drop-area-1" direction="horizontal">
+            {(provided) => (
+              <div
+                className="drop-area"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  border: "2px dashed #888",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {cards1.map((card) => (
+                  <div className={`cardd ${card.id}`} key={card.id}>
+                    {card.content}
+                  </div>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          {/* Ряд гравця 2 */}
+          <Droppable droppableId="drop-area-2" direction="horizontal">
+            {(provided) => (
+              <div
+                className="drop-area"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  border: "2px dashed #888",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {cards2.map((card) => (
+                  <div className={`cardd ${card.id}`} key={card.id}>
+                    {card.content}
+                  </div>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </div>
+
+        <button onClick={playAiMove} className="make-move">
+          Хід ШІ
+        </button>
+        <HandRoma hand={hand} />
+      </DragDropContext>
+    </div>
+  );
 }
