@@ -185,6 +185,66 @@ body {
   left: 5vh;
 }
 
+.shop-container {
+  background-color: #f5f5f5;
+  padding: 16px;
+  border: 2px solid goldenrod;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  z-index: 10000;
+  position: absolute;
+  width: 80vw;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.shop-cards {
+  display: flex;
+  margin: 100px;
+  gap: 180px;
+}
+
+.shop-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shop-card-item {
+  transform: scale(2.2); /* Збільшує картку */
+  transition: transform 0.3s ease;
+}
+
+.shop-card-item:hover {
+  transform: scale(2.4); /* Додає анімацію при наведенні */
+}
+
+.card-price {
+  margin-top: 100px;
+  transform: scale(2.2);
+  font-weight: bold;
+  color: goldenrod;
+}
+
+.close-shop-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.close-shop-button:hover {
+  background-color: #0056b3;
+}
+
 @keyframes fadeInScale {
   0% {
     transform: scale(0);

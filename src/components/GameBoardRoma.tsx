@@ -44,6 +44,7 @@ const initialBoardState = {
     Player: 30,
   },
   currentTurn: "Player",
+  turnCount: 0,
 };
 
 export default function GameBoardRoma() {
@@ -59,6 +60,9 @@ export default function GameBoardRoma() {
   const [inspectedCard, setInspectedCard] = useState(null);
 
   const [aiCoins, setAiCoins] = useState(10);
+
+  const [shopVisible, setShopVisible] = useState(false); // Додано стан для відображення магазину
+  const [shopCards, setShopCards] = useState([]); // Массив карт магазину
 
   const handleCardClick = (card) => {
     if (inspectedCard?.id === card.id) {
@@ -189,7 +193,49 @@ export default function GameBoardRoma() {
         },
       }));
     }
+    setBoardState((prev) => ({
+      ...prev,
+      turnCount: prev.turnCount + 1,
+    }));
+
+    if (boardState.turnCount === 0 || boardState.turnCount % 6 === 0) {
+      openShop();
+    }
   }
+
+  const openShop = () => {
+    // Генерація 3 випадкових карт для магазину
+    const newShopCards = [
+      createUnit("shop-card-1", "card-1", "Shop", 8, 2),
+      createUnit("shop-card-2", "card-2", "Shop", 10, 3),
+      createUnit("shop-card-3", "card-3", "Shop", 12, 4),
+    ];
+    setShopCards(newShopCards);
+    setShopVisible(true);
+  };
+
+  const handleBuyCard = (card) => {
+    if (boardState.coins.Player < 5) {
+      console.log("Не вистачає монет для купівлі карти");
+      return;
+    }
+    setBoardState((prev) => ({
+      ...prev,
+      coins: {
+        ...prev.coins,
+        Player: prev.coins.Player - 5, // Вартість карти 5 монет
+      },
+      hands: {
+        ...prev.hands,
+        Player: [...prev.hands.Player, card], // Додаємо карту в руку
+      },
+    }));
+    setShopVisible(false); // Закриваємо магазин
+  };
+
+  const handleCloseShop = () => {
+    setShopVisible(false); // Закриваємо магазин
+  };
 
   function endTurn() {
     setBoardState((prev) => ({
@@ -447,6 +493,34 @@ export default function GameBoardRoma() {
       <div className="coin-display player-coins" style={{ bottom: "10vh" }}>
         Монети гравця: {boardState.coins.Player}
       </div>
+
+      {/* Вікно магазину */}
+      {shopVisible && (
+        <div className="shop-container">
+          <h4 style={{ marginBottom: "8vh", fontSize: "28px" }}>
+            Магазин карт
+          </h4>
+          <div className="shop-cards">
+            {shopCards.map((card) => (
+              <div
+                key={card.id}
+                className="shop-card"
+                onClick={() => handleBuyCard(card)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="shop-card-item">
+                  <CardRoma card={card} />
+                </div>
+                <div className="card-price">Ціна: 5 монет</div>
+              </div>
+            ))}
+          </div>
+
+          <button className="close-shop-button" onClick={handleCloseShop}>
+            Закрити магазин
+          </button>
+        </div>
+      )}
     </div>
   );
 }
