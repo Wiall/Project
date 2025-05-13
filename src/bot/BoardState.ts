@@ -1,19 +1,37 @@
-import { Card } from "./Card";
+export type PlayerType = "AI" | "HUMAN";
 
-export interface Player {
+export type UnitType = "MELEE" | "RANGED";
+
+export interface Unit {
   id: string;
+  owner: PlayerType;
+  type: UnitType;
   hp: number;
-  gold: number;
+  attack: number;
+  canAct: boolean; // Чи може діяти цього ходу
+  position: {
+    row: BoardRow;
+    index: number; // Позиція в межах ряду
+  };
+  isAlive: boolean;
 }
 
-export interface BoardLine {
-  cards: Card[];
-}
+export type BoardRow =
+  | "AI_FRONT" // передній ряд ШІ
+  | "AI_BACK" // задній (середній) ряд ШІ
+  | "PLAYER_FRONT" // передній (середній) ряд гравця
+  | "PLAYER_BACK"; // тиловий ряд гравця (де сам гравець)
 
 export interface BoardState {
-  player: Player;
-  opponent: Player;
-  line1: { cards: { id: string; content: string }[] };
-  line2: { cards: { id: string; content: string }[] };
-  line3: { cards: { id: string; content: string }[] };
+  rows: {
+    AI_FRONT: Unit[];
+    AI_BACK: Unit[];
+    PLAYER_FRONT: Unit[];
+    PLAYER_BACK: Unit[];
+  };
+  playerHp: number;
+  aiHp: number;
+  playerGold: number;
+  aiGold: number;
+  currentTurn: PlayerType;
 }

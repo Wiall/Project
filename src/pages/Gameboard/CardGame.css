@@ -149,6 +149,42 @@ body {
   position: absolute;
 }
 
+.coin-display {
+  font-size: 18px;
+  margin: 10px;
+  left: 0;
+  color: goldenrod;
+  font-weight: bold;
+  text-align: left;
+  position: absolute;
+}
+
+.turn-indicator {
+  position: absolute;
+  top: 50px;
+  left: 100px;
+  font-size: 18px;
+  margin: 10px;
+  transform: translateX(-50%);
+}
+
+.end-turn-button {
+  position: absolute;
+  right: 50px;
+}
+
+.player-info {
+  position: absolute;
+  top: 80vh;
+  left: 5vh;
+}
+
+.ai-info {
+  position: absolute;
+  top: 20vh;
+  left: 5vh;
+}
+
 @keyframes fadeInScale {
   0% {
     transform: scale(0);
