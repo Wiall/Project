@@ -9,6 +9,9 @@ export default function Header() {
         Echoes of Darkness
       </Link>
       <nav className="menu">
+        <NavLink to="/game-page" className="menu-link">
+          <button>Home</button>
+        </NavLink>
         <NavLink to="/profile" className="menu-link">
           <button>Profile</button>
         </NavLink>

@@ -1,62 +1,54 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
-export function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+export function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      setSuccess(false);
       return;
     }
 
     setError("");
-    console.log("Registering:", { username, email, password });
+    setSuccess(true);
+    console.log("New password:", password);
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
   };
 
   return (
     <div className="auth-container">
-      <h2>Create Account</h2>
+      <h2>Reset Password</h2>
       <form className="auth-form" onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Username"
-          required
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter new password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
           type="password"
-          placeholder="Confirm password"
+          placeholder="Confirm new password"
           required
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
         {error && <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>}
+        {success && <p style={{ color: "lightgreen", marginBottom: "1rem" }}>Password updated! Redirecting...</p>}
 
-        <button type="submit">Register</button>
-        <div className="auth-separator">or</div>
-        <button type="button" className="google-auth">Sign up with Google</button>
+        <button type="submit">Confirm</button>
       </form>
     </div>
   );
