@@ -1,51 +1,54 @@
 // aiLogic.js
 
 export function getPossibleMoves(boardState) {
-  const { hands, rows, currentTurn } = boardState;
+  const { hands, rows, usedCardsThisTurn } = boardState;
   const aiHand = hands.AI;
+  const aiUnits = [...rows.AI_FRONT, ...rows.AI_BACK];
+  const playerUnits = [...rows.PLAYER_MID, ...rows.PLAYER_REAR];
   const moves = [];
 
-  // Викладання карт з руки
-  aiHand.forEach((card) => {
-    moves.push({
-      type: "place",
-      card,
-      targetRow: "AI_FRONT",
-    });
-    moves.push({
-      type: "place",
-      card,
-      targetRow: "AI_BACK",
-    });
-  });
+  // Опції викладання (можна викласти 1 карту або нічого)
+  const placeOptions = aiHand.flatMap((card) => [
+    { type: "place", card, targetRow: "AI_FRONT" },
+    { type: "place", card, targetRow: "AI_BACK" },
+  ]);
+  placeOptions.push(null); // варіант без викладення
 
-  // Атака картами на полі
-  const aiFront = rows.AI_FRONT;
-  const aiBack = rows.AI_BACK;
-  const playerFront = rows.PLAYER_MID;
-  const playerBack = rows.PLAYER_REAR;
+  for (const placeMove of placeOptions) {
+    const currentMoveSet = [];
+    const simulatedRows = JSON.parse(JSON.stringify(rows)); // копія для імітації викладання
 
-  [...aiFront, ...aiBack].forEach((card) => {
-    if (!boardState.usedCardsThisTurn.has(card.id)) {
-      // Атака по ворожих картах
-      [...playerFront, ...playerBack].forEach((target) => {
-        moves.push({
+    if (placeMove) {
+      currentMoveSet.push(placeMove);
+      const { card, targetRow } = placeMove;
+      simulatedRows[targetRow].push(card); // імітуємо, що карта вже на полі
+    }
+
+    const aiUnits = [...simulatedRows.AI_FRONT, ...simulatedRows.AI_BACK];
+    const attackMoves = [];
+
+    for (const unit of aiUnits) {
+      if (usedCardsThisTurn.has(unit.id)) continue;
+
+      if (playerUnits.length > 0) {
+        const bestTarget = playerUnits[0]; // або інша логіка
+        attackMoves.push({
           type: "attack",
-          attacker: card,
-          target,
+          attacker: unit,
+          target: bestTarget,
         });
-      });
-
-      // Атака по гравцю, якщо немає карт у ворога
-      if (playerFront.length === 0 && playerBack.length === 0) {
-        moves.push({
+      } else {
+        attackMoves.push({
           type: "attack",
-          attacker: card,
-          target: null, // Атака по гравцю
+          attacker: unit,
+          target: null,
         });
       }
     }
-  });
+
+    const fullMoveSet = [...currentMoveSet, ...attackMoves];
+    moves.push(fullMoveSet);
+  }
 
   return moves;
 }
@@ -104,7 +107,7 @@ export function minimax(boardState, depth, isMaximizingPlayer) {
     return {
       value: evaluateBoard(boardState),
       move: null,
-      boardState, // ← повертаємо поточний стан
+      boardState,
     };
   }
 
@@ -115,43 +118,35 @@ export function minimax(boardState, depth, isMaximizingPlayer) {
     let bestMove = null;
     let bestBoard = null;
 
-    for (const move of possibleMoves) {
-      const newBoardState = applyMove(boardState, move);
+    for (const moveSet of possibleMoves) {
+      const newBoardState = applyMove(boardState, moveSet);
       const result = minimax(newBoardState, depth - 1, false);
 
       if (result.value > maxEval) {
         maxEval = result.value;
-        bestMove = move;
+        bestMove = moveSet;
         bestBoard = newBoardState;
       }
     }
 
-    return {
-      value: maxEval,
-      move: bestMove,
-      boardState: bestBoard,
-    };
+    return { value: maxEval, move: bestMove, boardState: bestBoard };
   } else {
     let minEval = Infinity;
     let bestMove = null;
     let bestBoard = null;
 
-    for (const move of possibleMoves) {
-      const newBoardState = applyMove(boardState, move);
+    for (const moveSet of possibleMoves) {
+      const newBoardState = applyMove(boardState, moveSet);
       const result = minimax(newBoardState, depth - 1, true);
 
       if (result.value < minEval) {
         minEval = result.value;
-        bestMove = move;
+        bestMove = moveSet;
         bestBoard = newBoardState;
       }
     }
 
-    return {
-      value: minEval,
-      move: bestMove,
-      boardState: bestBoard,
-    };
+    return { value: minEval, move: bestMove, boardState: bestBoard };
   }
 }
 
@@ -161,48 +156,63 @@ export function minimax(boardState, depth, isMaximizingPlayer) {
  * @param {Object} move - Хід, який потрібно застосувати.
  * @returns {Object} - Новий стан гри після застосування ходу.
  */
-function applyMove(boardState, move) {
+function applyMove(boardState, moveSet) {
   const newBoardState = JSON.parse(JSON.stringify(boardState));
 
-  // Відновлюємо Set після JSON-клонування
+  // Відновлюємо Set після клонування
   newBoardState.usedCardsThisTurn = new Set(boardState.usedCardsThisTurn);
 
-  switch (move.type) {
-    case "place":
-      const { card, targetRow } = move;
-      const handIndex = newBoardState.hands.AI.findIndex(
-        (c) => c.id === card.id
-      );
-
-      if (handIndex !== -1) {
-        newBoardState.hands.AI.splice(handIndex, 1);
-        newBoardState.rows[targetRow].push(card);
-      }
-      break;
-
-    case "attack":
-      const { attacker, target } = move;
-
-      if (target) {
-        target.hp -= attacker.attack;
-
-        if (target.hp <= 0) {
-          Object.keys(newBoardState.rows).forEach((row) => {
-            newBoardState.rows[row] = newBoardState.rows[row].filter(
-              (c) => c.id !== target.id
-            );
-          });
+  for (const move of moveSet) {
+    switch (move.type) {
+      case "place":
+        const { card, targetRow } = move;
+        const handIndex = newBoardState.hands.AI.findIndex(
+          (c) => c.id === card.id
+        );
+        if (handIndex !== -1) {
+          newBoardState.hands.AI.splice(handIndex, 1);
+          newBoardState.rows[targetRow].push({ ...card }); // переконайся, що копія карти, а не посилання
         }
-      } else {
-        newBoardState.health.Player -= attacker.attack;
-      }
+        break;
 
-      newBoardState.usedCardsThisTurn.add(attacker.id);
-      break;
+      case "attack":
+        const { attacker, target } = move;
+        const actualAttacker = findCardOnBoard(newBoardState.rows, attacker.id);
+        if (!actualAttacker) break; // захист
 
-    default:
-      break;
+        if (target) {
+          const actualTarget = findCardOnBoard(newBoardState.rows, target.id);
+          if (actualTarget) {
+            actualTarget.hp -= actualAttacker.attack;
+            if (actualTarget.hp <= 0) {
+              removeCardFromBoard(newBoardState.rows, actualTarget.id);
+            }
+          }
+        } else {
+          newBoardState.health.Player -= actualAttacker.attack;
+        }
+
+        newBoardState.usedCardsThisTurn.add(attacker.id);
+        break;
+
+      default:
+        break;
+    }
   }
 
   return newBoardState;
+}
+
+function findCardOnBoard(rows, cardId) {
+  for (const row of Object.values(rows)) {
+    const found = row.find((card) => card.id === cardId);
+    if (found) return found;
+  }
+  return null;
+}
+
+function removeCardFromBoard(rows, cardId) {
+  for (const rowKey of Object.keys(rows)) {
+    rows[rowKey] = rows[rowKey].filter((card) => card.id !== cardId);
+  }
 }

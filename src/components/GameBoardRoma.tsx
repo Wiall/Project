@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"; // вже є
 import HandAI from "./HandAI";
+import HandRoma from "./HandRoma";
 import CardRoma from "./CardRoma";
 import { PlayerType } from "../bot/BoardState";
 import { getPossibleMoves, evaluateBoard, minimax } from "../bot/aiLogic";
@@ -61,6 +62,7 @@ export default function GameBoardRoma() {
   const [inspectedCard, setInspectedCard] = useState(null);
 
   const [aiCoins, setAiCoins] = useState(10);
+  const [gameOver, setGameOver] = useState(false);
 
   const [shopVisible, setShopVisible] = useState(false); // Додано стан для відображення магазину
   const [shopCards, setShopCards] = useState([]); // Массив карт магазину
@@ -192,30 +194,27 @@ export default function GameBoardRoma() {
         currentTurn: "AI",
         coins: {
           ...prev.coins,
-          Player: prev.coins.Player + 5, // або скільки треба
+          Player: prev.coins.Player + 5,
         },
+        turnCount: prev.turnCount + 1,
       }));
 
-      // Поки ШІ нічого не робить — чекаємо вручну
-    } else if (boardState.currentTurn === "AI") {
-      setBoardState((prev) => ({
-        ...prev,
-        currentTurn: "Player",
-        coins: {
-          ...prev.coins,
-          AI: prev.coins.AI + 5,
-        },
-      }));
-    }
-    setBoardState((prev) => ({
-      ...prev,
-      turnCount: prev.turnCount + 1,
-    }));
-
-    if (boardState.turnCount === 0 || boardState.turnCount % 6 === 0) {
-      openShop();
+      const timer = setTimeout(() => {
+        if (boardState.turnCount % 6 === 0 && boardState.turnCount !== 0) {
+          openShop();
+        }
+      }, 2000);
     }
   }
+  useEffect(() => {
+    if (boardState.currentTurn === "AI") {
+      const timer = setTimeout(() => {
+        playAiMove();
+      }, 1000); // 1 секунда "роздумів"
+
+      return () => clearTimeout(timer); // при зміні currentTurn очищаємо таймер
+    }
+  }, [boardState.currentTurn]);
 
   const openShop = () => {
     // Генерація 3 випадкових карт для магазину
@@ -233,17 +232,26 @@ export default function GameBoardRoma() {
       console.log("Не вистачає монет для купівлі карти");
       return;
     }
+
+    // Створюємо копію карти з оновленим власником та новим ID
+    const newCard = {
+      ...card,
+      id: `${card.content}-${Date.now()}`, // унікальний ID, щоб уникнути конфліктів
+      owner: "Player",
+    };
+
     setBoardState((prev) => ({
       ...prev,
       coins: {
         ...prev.coins,
-        Player: prev.coins.Player - 5, // Вартість карти 5 монет
+        Player: prev.coins.Player - 5, // Вартість карти
       },
       hands: {
         ...prev.hands,
-        Player: [...prev.hands.Player, card], // Додаємо карту в руку
+        Player: [...prev.hands.Player, newCard], // Додаємо оновлену карту
       },
     }));
+
     setShopVisible(false); // Закриваємо магазин
   };
 
@@ -314,25 +322,26 @@ export default function GameBoardRoma() {
       console.log("Зараз не хід ШІ");
       return;
     }
+
     console.log("Before minimax call - Board State:", boardState);
 
-    const depth = 2; // Глибина пошуку
-    const aiMove = minimax(boardState, 2, true);
+    const depth = 2;
+    const aiMove = minimax(boardState, depth, true);
 
-    if (aiMove) {
-      console.log("Вибраний хід ШІ:", aiMove);
-
-      // Виконуємо хід
-      if (aiMove && aiMove.boardState) {
-        const cleanedBoard = removeDeadUnits(aiMove.boardState);
-        setBoardState(cleanedBoard);
-      } else {
-        console.error("aiMove або aiMove.boardState є undefined", aiMove);
-      }
+    if (aiMove && aiMove.boardState) {
+      const cleanedBoard = removeDeadUnits(aiMove.boardState);
+      setBoardState((prev) => ({
+        ...cleanedBoard,
+        currentTurn: "Player", // одразу передаємо хід назад гравцеві
+        coins: {
+          ...cleanedBoard.coins,
+          AI: cleanedBoard.coins.AI + 5,
+        },
+        turnCount: prev.turnCount + 1,
+      }));
+    } else {
+      console.error("aiMove або aiMove.boardState є undefined", aiMove);
     }
-
-    // Завершуємо хід ШІ
-    endTurn();
   };
 
   useEffect(() => {
@@ -340,14 +349,32 @@ export default function GameBoardRoma() {
     console.log(JSON.stringify(boardState, null, 2));
     console.log("Selected card:", selectedCard);
   }, [boardState, selectedCard]);
+  useEffect(() => {
+    const { AI, Player } = boardState.health;
+
+    if (!gameOver) {
+      if (AI <= 0) {
+        alert("Гравець переміг!");
+        setGameOver(true);
+      } else if (Player <= 0) {
+        alert("ШІ переміг!");
+        setGameOver(true);
+      }
+    }
+  }, [boardState.health, gameOver]);
 
   return (
     <div className="game-container">
       <div className="player-info">
         <img
-          src="https://esports-news.co.uk/wp-content/uploads/2016/09/anonymous-guy-1.jpg"
+          src="https://theflorala.com/wp-content/uploads/2024/09/no-name.jpeg"
           alt="Player"
-          style={{ width: 60 }}
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: "40px",
+            display: "flex",
+          }}
         />
         <span>HP: {boardState.health.Player}</span>
       </div>
@@ -381,16 +408,22 @@ export default function GameBoardRoma() {
         }}
       >
         <img
-          src="https://esports-news.co.uk/wp-content/uploads/2016/09/anonymous-guy-1.jpg"
+          src="https://theflorala.com/wp-content/uploads/2024/09/no-name.jpeg"
           alt="AI"
-          style={{ width: 60 }}
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: "40px",
+            display: "flex",
+          }}
         />
         <span>HP: {boardState.health.AI}</span>
       </div>
 
       <HandAI aiHand={boardState.hands.AI} />
-      <div className="coin-display ai-coins">
-        Монети ШІ: {boardState.coins.AI}
+      <div className="coin-display ai-coins" style={{ top: "32vh" }}>
+        <div className="coin-count">{boardState.coins.AI}</div>
+        <img className="coin" src="public/sprites/coin.png"></img>
       </div>
       <div className="turn-indicator">Зараз хід: {boardState.currentTurn}</div>
       {inspectedCard && (
@@ -398,7 +431,7 @@ export default function GameBoardRoma() {
           style={{
             position: "fixed",
             bottom: "20vh",
-            right: "5vw",
+            right: "10vw",
             background: "black",
             padding: "10px",
             border: "1px solid #ccc",
@@ -468,34 +501,21 @@ export default function GameBoardRoma() {
         </div>
       </div>
 
-      {/* AI Button */}
-      <button onClick={playAiMove} className="make-move">
-        Хід ШІ
-      </button>
+      {/* Кнопка завершення ходу*/}
       <button onClick={endTurn} className="end-turn-button">
         Завершити хід
       </button>
 
       {/* Hand of Player */}
-      <div className="hand-zone">
-        {boardState.hands.Player.map((card) => (
-          <div
-            className={`cardd ${card.id}`}
-            key={card.id}
-            onClick={() => handleCardClick(card)}
-            style={{
-              cursor: "pointer",
-              transform:
-                selectedCard?.id === card.id ? "scale(1.1)" : "scale(1)",
-              transition: "transform 0.2s ease",
-            }}
-          >
-            {card.content}
-          </div>
-        ))}
-      </div>
-      <div className="coin-display player-coins" style={{ bottom: "10vh" }}>
-        Монети гравця: {boardState.coins.Player}
+      <HandRoma
+        hand={boardState.hands.Player}
+        onCardClick={handleCardClick}
+        selectedCard={selectedCard}
+      />
+
+      <div className="coin-display player-coins" style={{ bottom: "4.5vh" }}>
+        <div className="coin-count">{boardState.coins.Player}</div>
+        <img className="coin" src="public/sprites/coin.png"></img>
       </div>
 
       {/* Вікно магазину */}

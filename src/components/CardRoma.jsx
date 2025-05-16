@@ -10,6 +10,7 @@ export default function CardRoma({ card, onClick }) {
       style={{ cursor: "pointer" }}
     >
       <img src={`${card.content}.png`} alt="" />
+      <span className="card-id">{card.id}</span>
       <span className="stat-1">❤️ {card.hp}</span>
       <span className="stat-2">🗡️ {card.attack}</span>
     </div>

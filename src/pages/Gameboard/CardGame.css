@@ -3,10 +3,11 @@ body {
   height: 100vh;
 }
 
-.blocks-container {
-  display: flex;
+.blocks-wrapper {
   justify-content: space-around;
-  gap: 20px;
+  width: 70vw;
+  gap: 10px;
+  margin: 0 auto;
 }
 
 .game-container {
@@ -25,7 +26,7 @@ body {
 
 .hand-container {
   display: flex;
-  /*gap: 20px;*/
+  gap: 20px;
   position: relative;
 }
 
@@ -112,8 +113,14 @@ body {
   position: absolute;
   display: block;
   font-size: 10px;
-  bottom: -4px;
+  bottom: 0px;
   right: 5.5px;
+}
+
+.card-id {
+  position: absolute;
+  display: block;
+  font-size: 16px;
 }
 
 .cardd:not(:last-child) {
@@ -151,12 +158,22 @@ body {
 
 .coin-display {
   font-size: 18px;
+  left: 3.5vw;
   margin: 10px;
-  left: 0;
   color: goldenrod;
   font-weight: bold;
   text-align: left;
   position: absolute;
+  align-items: center;
+  display: flex;
+}
+.coin-count {
+  color: goldenrod;
+  font-size: 22px;
+}
+.coin {
+  width: 40px;
+  height: 40px;
 }
 
 .turn-indicator {
@@ -170,19 +187,31 @@ body {
 
 .end-turn-button {
   position: absolute;
-  right: 50px;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 10px;
+  background-color: #5c2e00;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .player-info {
   position: absolute;
-  top: 80vh;
-  left: 5vh;
+  border-radius: 6px;
+  top: 75vh;
+  left: 7vh;
 }
 
 .ai-info {
   position: absolute;
+  border-radius: 6px;
   top: 20vh;
-  left: 5vh;
+  left: 7vh;
 }
 
 .shop-container {
