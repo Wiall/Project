@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"; // вже є
 import HandAI from "./HandAI";
 import CardRoma from "./CardRoma";
 import { PlayerType } from "../bot/BoardState";
+import { getPossibleMoves } from "../bot/aiLogic";
 
 // Тип Unit (якщо не TypeScript, просто залишаємо як JS-обʼєкт)
 const createUnit = (id, content, player, hp = 10, attack = 3) => ({
