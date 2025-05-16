@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"; // вже є
 import HandAI from "./HandAI";
 import CardRoma from "./CardRoma";
 import { PlayerType } from "../bot/BoardState";
-import { getPossibleMoves } from "../bot/aiLogic";
+import { getPossibleMoves, evaluateBoard, minimax } from "../bot/aiLogic";
 
 // Тип Unit (якщо не TypeScript, просто залишаємо як JS-обʼєкт)
 const createUnit = (id, content, player, hp = 10, attack = 3) => ({
@@ -170,6 +170,19 @@ export default function GameBoardRoma() {
     });
   }
 
+  function removeDeadUnits(board) {
+    const cleanedRows = {};
+
+    for (const [rowKey, cards] of Object.entries(board.rows)) {
+      cleanedRows[rowKey] = cards.filter((card) => card.hp > 0);
+    }
+
+    return {
+      ...board,
+      rows: cleanedRows,
+    };
+  }
+
   const NEXT_TURN_BONUS = 2;
 
   function handleEndTurn() {
@@ -301,35 +314,25 @@ export default function GameBoardRoma() {
       console.log("Зараз не хід ШІ");
       return;
     }
+    console.log("Before minimax call - Board State:", boardState);
 
-    if (boardState.hasPlayedCardThisTurn) {
-      console.log("ШІ вже виклав карту цього ходу");
-      return;
+    const depth = 2; // Глибина пошуку
+    const aiMove = minimax(boardState, 2, true);
+
+    if (aiMove) {
+      console.log("Вибраний хід ШІ:", aiMove);
+
+      // Виконуємо хід
+      if (aiMove && aiMove.boardState) {
+        const cleanedBoard = removeDeadUnits(aiMove.boardState);
+        setBoardState(cleanedBoard);
+      } else {
+        console.error("aiMove або aiMove.boardState є undefined", aiMove);
+      }
     }
-    setBoardState((prev) => {
-      const aiHand = prev.hands.AI;
-      if (aiHand.length === 0) return prev;
 
-      const cardToMove = aiHand[0];
-      const aiFront = prev.rows.AI_FRONT;
-      const aiBack = prev.rows.AI_BACK;
-
-      const targetRow =
-        aiFront.length <= aiBack.length ? "AI_FRONT" : "AI_BACK";
-
-      return {
-        ...prev,
-        hands: {
-          ...prev.hands,
-          AI: aiHand.slice(1),
-        },
-        rows: {
-          ...prev.rows,
-          [targetRow]: [...prev.rows[targetRow], cardToMove],
-        },
-        hasPlayedCardThisTurn: true,
-      };
-    });
+    // Завершуємо хід ШІ
+    endTurn();
   };
 
   useEffect(() => {
