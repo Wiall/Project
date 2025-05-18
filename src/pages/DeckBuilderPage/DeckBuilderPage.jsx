@@ -1,23 +1,15 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import "./DeckBuilderPage.css";
-
-const initialCards = [
-    { id: "sun", src: "/sprites/cards/sun_paladin.png" },
-    { id: "sun1", src: "/sprites/cards/sun_paladin.png" },
-    { id: "sun2", src: "/sprites/cards/sun_paladin.png" },
-    { id: "sun3", src: "/sprites/cards/sun_paladin.png" },
-    { id: "sun4", src: "/sprites/cards/sun_paladin.png" },
-    { id: "sun5", src: "/sprites/cards/sun_paladin.png" },
-    { id: "sun6", src: "/sprites/cards/sun_paladin.png" },
-];
+import { api } from "../../api";
 
 export default function DeckBuilderPage() {
-    const [available, setAvailable] = useState(initialCards);
+    const [available, setAvailable] = useState([]);
     const [deck, setDeck] = useState([]);
     const [selectedCard, setSelectedCard] = useState(null);
     const [selectedDeckCard, setSelectedDeckCard] = useState(null);
-  
+
+
     function handleAddToDeck(card) {
       setDeck((prev) => [...prev, card]);
       setAvailable((prev) => prev.filter((c) => c.id !== card.id));
@@ -30,6 +22,18 @@ export default function DeckBuilderPage() {
       setSelectedDeckCard(null);
     }
   
+    useEffect(() => {
+      const loadCards = async () => {
+        try {
+          const res =  await api.get('/user/card')
+          if (res.status === 200) {
+            setAvailable(res.data)
+          }
+        } catch (error) { }
+      }
+      loadCards()
+    }, [])
+
     return (
       <div className="deck-builder">
         <Header />
@@ -42,10 +46,10 @@ export default function DeckBuilderPage() {
           <section className="deck-list">
             <h2>Your Deck</h2>
             <div className="card-grid">
-              {deck.map((card) => (
+              {deck?.map((card) => (
                 <div key={card.id} className="card-wrapper">
                   <img
-                    src={card.src}
+                    src={`http://localhost:3000${card.imageUrl}`}
                     alt={card.id}
                     className="card-image-static"
                     onClick={() => setSelectedDeckCard(card)}
@@ -64,10 +68,12 @@ export default function DeckBuilderPage() {
           <section className="card-pool">
             <h2>Available Cards</h2>
             <div className="card-grid">
-              {available.map((card) => (
+              {available?.map((card) => (
                 <div key={card.id} className="card-wrapper">
                   <img
-                    src={card.src}
+                    src={`http://localhost:3000${card.imageUrl}`}
+                    width={200}
+                    height={200}
                     alt={card.id}
                     className="card-image-static"
                     onClick={() => setSelectedCard(card)}
