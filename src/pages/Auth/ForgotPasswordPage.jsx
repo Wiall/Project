@@ -6,7 +6,7 @@ export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [code, setCode] = useState("");
-  const [cooldown, setCooldown] = useState(0); // Время ожидания
+  const [cooldown, setCooldown] = useState(0); 
   const navigate = useNavigate();
 
   useEffect(() => {
