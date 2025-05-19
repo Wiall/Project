@@ -1,5 +1,11 @@
 /* DeckBuilderPage.css */
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 .deck-builder {
     min-height: 100vh;
     background: url('/sprites/background.jpg') no-repeat center center fixed;
@@ -41,6 +47,8 @@
     align-items: flex-start;
     max-width: 1400px;
     margin: 0 auto;
+    overflow: hidden;
+    max-height: 100vh;
   }
   
   .deck-list, .card-pool {
@@ -67,6 +75,7 @@
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: flex-start;
+    overflow: hidden;
   }
   
   .card-wrapper {
@@ -182,3 +191,98 @@
     }
   }
   
+  .deck-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.deck-controls label select {
+  background-color: #2d1a00;
+  color: #f5deb3;
+  border: 1px solid #7b5c30;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-family: inherit;
+}
+
+.deck-switcher-inline {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.deck-switcher-inline button {
+  background-color: #5c2e00;
+  color: #fff8e6;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 0 0.3rem;
+  transition: background-color 0.3s ease;
+}
+
+.deck-switcher-inline button:hover {
+  background-color: #8a4600;
+}
+
+.deck-switcher-inline .active {
+  background-color: #d18800;
+  box-shadow: 0 0 6px #f0e6c0;
+}
+
+.deck-controls-inline button {
+  padding: 0.4rem 0.7rem;
+  height: 2.2rem;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  line-height: 1.2;
+}
+
+.deck-controls-inline .save-button {
+  background-color: #5c2e00;
+  color: #fff8e6;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  font-weight: bold;
+  margin: 0 0.3rem;
+  line-height: 1.2; 
+  height: 2.2rem;  
+  transition: background-color 0.3s ease;
+}
+
+.deck-controls-inline .save-button:hover {
+  background-color: #4da800;
+}
+
+.faction-filter {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.faction-filter select {
+  background-color: #2d1a00;
+  color: #f5deb3;
+  border: 1px solid #7b5c30;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.deck-controls-inline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
