@@ -5,6 +5,7 @@ button {
 
 .shop-wrapper {
   background: url('/sprites/shop-background.png') no-repeat center center fixed;
+  background-size: cover;
 }
 
 /* Загальні стилі */

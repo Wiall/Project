@@ -1,3 +1,5 @@
+import './index.css'
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import About from "./pages/About/About";
 import GameBoardLayout from "./pages/Gameboard/GameBoardLayout";
@@ -12,6 +14,8 @@ import { ForgotPasswordPage } from "./pages/Auth/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/Auth/ResetPasswordPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import { PrivateRoute } from "./components/Auth/PrivateRoute";
+
+
 
 function App() {
   return (

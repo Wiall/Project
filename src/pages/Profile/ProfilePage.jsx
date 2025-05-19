@@ -26,7 +26,7 @@ export default function ProfilePage() {
   const [displayedBio, setDisplayedBio] = useState(bio);
   const [isTyping, setIsTyping] = useState(false);
 
-  const [selectedBorder, setSelectedBorder] = useState("default");
+  const [selectedBorder, setSelectedBorder] = useState(user.frame);
   const [editBorder, setEditBorder] = useState(selectedBorder);
 
   const handleLogout = async () => {
@@ -41,7 +41,8 @@ export default function ProfilePage() {
     try {
       const res = await editProfile({
         username: editUsername,
-        description: editBio
+        description: editBio,
+        frame: editBorder
       });
     } catch (error) {
 

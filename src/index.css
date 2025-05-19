@@ -1,0 +1,26 @@
+::-webkit-scrollbar {
+  width: 12px;               /* ширина вертикального */
+  height: 12px;              /* висота горизонтального */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.3);  /* темний фон «трека» */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #664422;     /* коричнево-золотистий колір «повзунка» */
+  border-radius: 6px;
+  border: 3px solid rgba(0,0,0,0); /* відступи, щоб була «порожня» рамка */
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #886644;     /* світліший при наведенні */
+}
+
+/* Для Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #664422 rgba(0,0,0,0.3);
+}

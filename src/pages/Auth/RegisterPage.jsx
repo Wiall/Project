@@ -27,7 +27,7 @@ export function RegisterPage() {
         return;
       }
 
-      const registerRes = await api.post(`/auth/register`, {
+      const registerRes = await api.post(`/api/auth/register`, {
         username,
         email,
         password

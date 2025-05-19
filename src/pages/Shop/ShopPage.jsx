@@ -4,7 +4,6 @@ import Header from "../../components/Header/Header";
 import { AuthContext } from "../../providers/AuthProvider";
 import { api } from "../../api";
 import toast from "react-hot-toast";
-import { API_URL } from "../../constants";
 
 
 export default function ShopPage() {
@@ -14,20 +13,16 @@ export default function ShopPage() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("info");
   const [selectedPack, setSelectedPack] = useState(null);
-  const [dropInfo, setDropInfo] = useState([]);
+
 
   const [isOpening, setIsOpening] = useState(false);
   const [showMagic, setShowMagic] = useState(false);
-  const [showCards, setShowCards] = useState(false);
-  const [openedCards, setOpenedCards] = useState([]);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [showAllCards, setShowAllCards] = useState(false);
   const [drop, setDrop] = useState(null)
 
 
   useEffect(() => {
     (async () => {
-      const res = await api.get("/container");
+      const res = await api.get("/api/container");
       setContainers(res.data);
     })();
   }, []);
@@ -39,13 +34,10 @@ export default function ShopPage() {
     setShowModal(true);
 
     try {
-      const res = await api.get(`/container/${pack.id}/drops`);
+      const res = await api.get(`/api/container/${pack.id}/drops`);
       console.log(res.data);
       setDrop(res.data);
-    } catch (err) {
-      console.error("Failed to load drops", err);
-      setDropInfo([]);
-    }
+    } catch (err) { }
   }
 
   function handleBuy(pack) {
@@ -62,8 +54,7 @@ export default function ShopPage() {
     setTimeout(async () => {
       setShowMagic(false);
       setIsOpening(false);
-      setShowCards(true);
-      const dropRes = await api.post(`/container/${pack.id}/open`);
+      const dropRes = await api.post(`/api/container/${pack.id}/open`);
       setDrop(dropRes.data);
     }, 2000);
   }
@@ -72,14 +63,6 @@ export default function ShopPage() {
     setShowModal(false);
     setIsOpening(false);
     setShowMagic(false);
-    setShowCards(false);
-    setOpenedCards([]);
-    setActiveCardIndex(0);
-    setShowAllCards(false);
-    setDropInfo([]);
-  }
-
-  function handleNextCard() {
     setDrop(null)
   }
 
@@ -141,7 +124,7 @@ export default function ShopPage() {
                 <>
                   <h2 className="modal-title">Drop Chances</h2>
                   <ul className="drop-list">
-                    {dropInfo.map((d) => (
+                    {drop.map((d) => (
                       <li key={d.cardId}>
                         <strong>{d.card.name}:</strong>{" "}
                         {d?.dropChancePct}%
@@ -170,6 +153,7 @@ export default function ShopPage() {
                       <img
                         src={`http://localhost:3000${drop.imageUrl}`}
                         alt={drop.name}
+                        width={200}
                         className="drop-card-image"
                       />
                       <p
@@ -181,7 +165,7 @@ export default function ShopPage() {
                       </p>
                       <button
                         className="next-btn"
-                        onClick={handleNextCard}
+                        onClick={closeModal}
                       >
                         Close
                       </button>

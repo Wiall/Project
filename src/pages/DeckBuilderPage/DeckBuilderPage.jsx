@@ -52,7 +52,7 @@ export default function DeckBuilderPage() {
   useEffect(() => {
     const loadCards = async () => {
       try {
-        const res = await api.get("/user/card");
+        const res = await api.get("/api/user/card");
         if (res.status === 200) {
           setAvailable(res.data);
         }
