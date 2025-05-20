@@ -1,4 +1,4 @@
-import { BoardState, Player } from "./BoardState";
+import { BoardState } from "./BoardState";
 import { Move, generateMoves } from "./MoveGenerator";
 import { evaluateBoardState } from "./Evaluation";
 

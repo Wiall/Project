@@ -286,3 +286,24 @@ html, body {
   text-align: center;
 }
 
+.deck-controls-inline .save-deck-button {
+  background-color: #5c2e00;
+  color: #fff8e6;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  font-weight: bold;
+  line-height: 1.2;
+  height: 2.2rem;
+  transition: background-color 0.3s ease;
+}
+
+.deck-controls-inline .save-deck-button:hover {
+  background-color: #8a4600;
+}
+
+.deck-controls-inline .save-deck-button:disabled {
+  background-color: #333;
+  color: #777;
+  cursor: not-allowed;
+}

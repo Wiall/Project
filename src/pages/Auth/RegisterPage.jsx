@@ -50,7 +50,7 @@ export function RegisterPage() {
       navigate('/game-page');
 
     } catch (error) {
-      toast.success('Something went wrong!')
+      toast.error('Something went wrong!')
     }
     setError("");
   };

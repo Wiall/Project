@@ -1,109 +1,156 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Header/Header";
 import "./DeckBuilderPage.css";
 import { api } from "../../api";
+import { API_URL } from "../../constants";
+import toast from "react-hot-toast";
+
+const fractions = [
+  "Order of the Shining Sun",
+  "Conclave of Sorcerers",
+  "Cult of Shadows",
+  "Golden Syndicate",
+  "Legion of Chaos",
+  "Guardians of Nature",
+];
 
 export default function DeckBuilderPage() {
-  const [available, setAvailable] = useState([]);
-  const [faction, setFaction] = useState("all");
-  const [decks, setDecks] = useState([[], [], [], [], []]);
-  const [currentDeckIndex, setCurrentDeckIndex] = useState(0);
+  const [decks, setDecks] = useState(() => {
+    const saved = localStorage.getItem("deckBuilder_decks");
+    let parsed = {};
+    try { parsed = saved ? JSON.parse(saved) : {}; } catch { parsed = {}; }
+    const result = {};
+    fractions.forEach((f) => {
+      result[f] = Array.isArray(parsed[f]) ? parsed[f] : [];
+    });
+    return result;
+  });
+
+  const [tab, setTab] = useState(() => {
+    const savedTab = localStorage.getItem("deckBuilder_tab");
+    return fractions.includes(savedTab) ? savedTab : fractions[0];
+  });
+
+  const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedDeckCard, setSelectedDeckCard] = useState(null);
 
-  const filteredAvailable =
-    faction === "all"
-      ? available
-      : available.filter((card) => card.faction === faction);
+  useEffect(() => {
+    api.get("/api/user/card")
+      .then((res) => setCards(res.data))
+      .catch(console.error);
+  }, []);
 
-  const currentDeck = decks[currentDeckIndex];
+  useEffect(() => {
+    localStorage.setItem("deckBuilder_decks", JSON.stringify(decks));
+  }, [decks]);
+
+  useEffect(() => {
+    localStorage.setItem("deckBuilder_tab", tab);
+  }, [tab]);
+
+  const currentDeck = decks[tab];
+  const available = cards
+    .filter((c) => c.fraction === tab)
+    .filter((c) => !currentDeck.some((d) => d.id === c.id));
+
+  const canSave =
+    currentDeck.length >= 15 &&
+    currentDeck.some((c) => c.isLeader === true);
 
   function handleAddToDeck(card) {
-    const newDecks = [...decks];
-    newDecks[currentDeckIndex] = [...newDecks[currentDeckIndex], card];
-    setDecks(newDecks);
-    setAvailable((prev) => prev.filter((c) => c.id !== card.id));
+    setDecks((prev) => ({
+      ...prev,
+      [tab]: [...(prev[tab] || []), card],
+    }));
     setSelectedCard(null);
   }
 
   function handleReturnToAvailable(card) {
-    const newDecks = [...decks];
-    newDecks[currentDeckIndex] = newDecks[currentDeckIndex].filter(
-      (c) => c.id !== card.id
-    );
-    setDecks(newDecks);
-    setAvailable((prev) => [...prev, card]);
+    setDecks((prev) => ({
+      ...prev,
+      [tab]: prev[tab].filter((c) => c.id !== card.id),
+    }));
     setSelectedDeckCard(null);
   }
 
-  function saveDecksToStorage() {
-    localStorage.setItem("deckBuilder_decks", JSON.stringify(decks));
-    localStorage.setItem("deckBuilder_currentIndex", currentDeckIndex);
-    alert("Deck saved!");
-  }
+  function handleSaveDeck() {
+    if (!canSave) {
+      return toast.error(
+        "Deck must contain at least 15 cards and at least one leader."
+      );
+    }
 
-  function loadDecksFromStorage() {
-    const savedDecks = localStorage.getItem("deckBuilder_decks");
-    const savedIndex = localStorage.getItem("deckBuilder_currentIndex");
-    if (savedDecks) setDecks(JSON.parse(savedDecks));
-    if (savedIndex) setCurrentDeckIndex(Number(savedIndex));
-  }
-
-  useEffect(() => {
-    const loadCards = async () => {
-      try {
-        const res = await api.get("/api/user/card");
-        if (res.status === 200) {
-          setAvailable(res.data);
-        }
-      } catch (error) {
-        console.error("Error loading cards:", error);
-      }
+    const payload = {
+      faction: tab,
+      cards: decks[tab],
     };
-    loadCards();
-    loadDecksFromStorage();
-  }, []);
 
- return (
+    localStorage.setItem(
+      "deckBuilder_activeDeck",
+      JSON.stringify(payload)
+    );
+
+    const saved = JSON.parse(
+      localStorage.getItem("deckBuilder_activeDeck")
+    );
+    console.log("Active deck loaded from storage:", saved);
+
+    toast.success(`Deck for "${tab}" saved as active!`);
+  }
+
+
+  return (
     <div className="deck-builder">
       <Header />
+
       <header className="deck-header">
         <h1>Deck Builder</h1>
         <p>Click a card to add it to your deck or return it.</p>
       </header>
 
+      <div className="deck-switcher-inline">
+        {fractions.map((name) => (
+          <button
+            key={name}
+            className={tab === name ? "active" : ""}
+            onClick={() => setTab(name)}
+          >
+            {name}
+          </button>
+        ))}
+      </div>
+
+      <div className="deck-controls-inline">
+        <button
+          className="save-deck-button"
+          onClick={handleSaveDeck}
+          disabled={!canSave}
+        >
+          Save Deck
+        </button>
+      </div>
+
       <main className="deck-content">
         <section className="deck-list">
-          <h2>Your Deck</h2>
-          <div className="deck-controls-inline">
-            <div className="deck-switcher-inline">
-              {Array.from({ length: 5 }, (_, i) => (
-                <button
-                  key={i}
-                  className={currentDeckIndex === i ? "active" : ""}
-                  onClick={() => setCurrentDeckIndex(i)}
-                >
-                  Deck {i + 1}
-                </button>
-              ))}
-            </div>
-            <button className="save-button" onClick={saveDecksToStorage}>
-              💾 Save Deck
-            </button>
-          </div>
+          <h2>Your Deck: {tab}</h2>
           <div className="card-grid">
-            {currentDeck?.map((card) => (
+            {currentDeck.map((card) => (
               <div key={card.id} className="card-wrapper">
                 <img
-                  src={`http://localhost:3000${card.imageUrl}`}
-                  alt={card.id}
+                  src={`${API_URL}${card.imageUrl}`}
+                  alt={card.name}
                   className="card-image-static"
                   onClick={() => setSelectedDeckCard(card)}
                 />
                 {selectedDeckCard?.id === card.id && (
                   <div className="card-action-popup">
-                    <button onClick={() => handleReturnToAvailable(card)}>Return</button>
-                    <button onClick={() => setSelectedDeckCard(null)}>Cancel</button>
+                    <button onClick={() => handleReturnToAvailable(card)}>
+                      Return
+                    </button>
+                    <button onClick={() => setSelectedDeckCard(null)}>
+                      Cancel
+                    </button>
                   </div>
                 )}
               </div>
@@ -113,34 +160,23 @@ export default function DeckBuilderPage() {
 
         <section className="card-pool">
           <h2>Available Cards</h2>
-          <div className="faction-filter">
-            <label>
-              Faction:
-              <select value={faction} onChange={(e) => setFaction(e.target.value)}>
-                <option value="Order of the Shining Sun">Order of the Shining Sun</option>
-                <option value="Conclave of Sorcerers">Conclave of Sorcerers</option>
-                <option value="Guardians of Nature">Guardians of Nature</option>
-                <option value="Cult of Shadows">Cult of Shadows</option>
-                <option value="Legion of Chaos">Legion of Chaos</option>
-                <option value="Golden Syndicate">Golden Syndicate</option>
-              </select>
-            </label>
-          </div>
           <div className="card-grid">
-            {filteredAvailable?.map((card) => (
+            {available.map((card) => (
               <div key={card.id} className="card-wrapper">
                 <img
-                  src={`http://localhost:3000${card.imageUrl}`}
-                  width={200}
-                  height={200}
-                  alt={card.id}
+                  src={`${API_URL}${card.imageUrl}`}
+                  alt={card.name}
                   className="card-image-static"
                   onClick={() => setSelectedCard(card)}
                 />
                 {selectedCard?.id === card.id && (
                   <div className="card-action-popup">
-                    <button onClick={() => handleAddToDeck(card)}>Add to Deck</button>
-                    <button onClick={() => setSelectedCard(null)}>Cancel</button>
+                    <button onClick={() => handleAddToDeck(card)}>
+                      Add to Deck
+                    </button>
+                    <button onClick={() => setSelectedCard(null)}>
+                      Cancel
+                    </button>
                   </div>
                 )}
               </div>
