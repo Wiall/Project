@@ -520,7 +520,7 @@ export default function GameBoardRoma() {
 
       {/* Вікно магазину */}
       {shopVisible && (
-        <div className="shop-container">
+        <div className="shop-container-game">
           <h4 style={{ marginBottom: "8vh", fontSize: "28px" }}>
             Магазин карт
           </h4>
