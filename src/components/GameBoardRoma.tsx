@@ -620,7 +620,7 @@ export default function GameBoardRoma() {
         Завершити хід
       </button>
 
-      {/* Hand of Player */}
+      {/* Hand of Player*/}
       <HandRoma
         hand={boardState.hands.Player}
         onCardClick={handleCardClick}
