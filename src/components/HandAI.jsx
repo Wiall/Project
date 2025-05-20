@@ -11,7 +11,7 @@ export default function HandAI({ aiHand, disappearingCardId, onCardClick }) {
         {aiHand.map((card) => (
           <CardRoma
             key={card.id}
-            card={card}
+            card={{ ...card, isAiCard: true, isHidden: true }}
             onClick={onCardClick}
             isDisappearing={disappearingCardId === card.id}
           />

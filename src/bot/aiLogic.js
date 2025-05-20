@@ -184,9 +184,6 @@ function applyMove(boardState, moveSet) {
           const actualTarget = findCardOnBoard(newBoardState.rows, target.id);
           if (actualTarget) {
             actualTarget.hp -= actualAttacker.attack;
-            if (actualTarget.hp <= 0) {
-              removeCardFromBoard(newBoardState.rows, actualTarget.id);
-            }
           }
         } else {
           newBoardState.health.Player -= actualAttacker.attack;
@@ -200,7 +197,8 @@ function applyMove(boardState, moveSet) {
     }
   }
 
-  return newBoardState;
+  // наприкінці applyMove:
+  return removeDeadUnits(newBoardState);
 }
 
 function findCardOnBoard(rows, cardId) {
@@ -211,8 +209,26 @@ function findCardOnBoard(rows, cardId) {
   return null;
 }
 
-function removeCardFromBoard(rows, cardId) {
-  for (const rowKey of Object.keys(rows)) {
-    rows[rowKey] = rows[rowKey].filter((card) => card.id !== cardId);
+function removeDeadUnits(boardState) {
+  const newRows = {};
+  const newGraveyard = { ...boardState.graveyard };
+
+  for (const [rowKey, cards] of Object.entries(boardState.rows)) {
+    newRows[rowKey] = [];
+
+    for (const card of cards) {
+      if (card.hp > 0) {
+        newRows[rowKey].push(card);
+      } else {
+        const isPlayer = rowKey.startsWith("PLAYER");
+        const owner = isPlayer ? "Player" : "AI";
+        newGraveyard[owner].push(card);
+      }
+    }
   }
+
+  boardState.rows = newRows;
+  boardState.graveyard = newGraveyard;
+
+  return boardState;
 }

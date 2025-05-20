@@ -4,6 +4,7 @@ import HandRoma from "./HandRoma";
 import CardRoma from "./CardRoma";
 import { PlayerType } from "../bot/BoardState";
 import { getPossibleMoves, evaluateBoard, minimax } from "../bot/aiLogic";
+import { transform } from "typescript";
 
 // Створення юніта
 const createUnit = (id, cardData, player) => ({
@@ -99,6 +100,10 @@ export default function GameBoardRoma() {
           PLAYER_MID: [],
           PLAYER_REAR: [],
         },
+        graveyard: {
+          Player: [],
+          AI: [],
+        },
         coins: {
           AI: 10,
           Player: 10,
@@ -192,44 +197,82 @@ export default function GameBoardRoma() {
 
   function updateCardInState(updatedCard) {
     setBoardState((prevState) => {
+      let removedCard = null;
+
       const updatedRows = Object.fromEntries(
         Object.entries(prevState.rows).map(([rowKey, rowCards]) => {
-          const newCards =
-            updatedCard.hp <= 0
-              ? rowCards.filter((card) => card.id !== updatedCard.id) // Видаляємо
-              : rowCards.map((card) =>
-                  card.id === updatedCard.id
-                    ? { ...card, ...updatedCard }
-                    : card
-                ); // Оновлюємо
+          const newCards = rowCards
+            .map((card) => {
+              if (card.id === updatedCard.id) {
+                const newHp = updatedCard.hp;
+                if (newHp <= 0) {
+                  removedCard = { ...card, hp: 0 }; // карта "помирає"
+                  return null;
+                } else {
+                  return { ...card, ...updatedCard };
+                }
+              }
+              return card;
+            })
+            .filter(Boolean); // видаляє null-значення (мертві карти)
 
           return [rowKey, newCards];
         })
       );
 
-      // Скидаємо inspectedCard, якщо її вже немає на полі
-      const isCardRemoved = updatedCard.hp <= 0;
-      if (isCardRemoved && inspectedCard?.id === updatedCard.id) {
+      const newGraveyard = { ...prevState.graveyard };
+
+      if (removedCard) {
+        const owner =
+          removedCard.owner || (removedCard.isAiCard ? "AI" : "Player");
+        newGraveyard[owner] = [
+          ...(prevState.graveyard[owner] || []),
+          removedCard,
+        ];
+      }
+
+      if (removedCard && inspectedCard?.id === removedCard.id) {
         setInspectedCard(null);
       }
 
       return {
         ...prevState,
         rows: updatedRows,
+        graveyard: newGraveyard,
       };
     });
   }
 
   function removeDeadUnits(board) {
-    const cleanedRows = {};
+    const deadPerSide = {
+      Player: [],
+      AI: [],
+    };
 
-    for (const [rowKey, cards] of Object.entries(board.rows)) {
-      cleanedRows[rowKey] = cards.filter((card) => card.hp > 0);
-    }
+    const cleanedRows = Object.fromEntries(
+      Object.entries(board.rows).map(([rowKey, cards]) => {
+        const newCards = [];
+
+        for (const card of cards) {
+          if (card.hp <= 0) {
+            const owner = card.owner || (card.isAiCard ? "AI" : "Player");
+            deadPerSide[owner].push({ ...card, hp: 0 });
+          } else {
+            newCards.push(card);
+          }
+        }
+
+        return [rowKey, newCards];
+      })
+    );
 
     return {
       ...board,
       rows: cleanedRows,
+      graveyard: {
+        Player: [...(board.graveyard?.Player || []), ...deadPerSide.Player],
+        AI: [...(board.graveyard?.AI || []), ...deadPerSide.AI],
+      },
     };
   }
 
@@ -318,7 +361,17 @@ export default function GameBoardRoma() {
     }));
 
     // Видаляємо куплену карту з магазину
-    setShopCards((prev) => prev.filter((c) => c.id !== card.id));
+    setShopCards((prev) => {
+      const updatedShop = prev.filter((c) => c.id !== card.id);
+
+      // Якщо магазин спорожнів, закриваємо його
+      if (updatedShop.length === 0) {
+        handleCloseShop();
+        console.log("Магазин закрито, всі картки куплено");
+      }
+
+      return updatedShop;
+    });
   };
 
   const handleCloseShop = () => {
@@ -504,30 +557,19 @@ export default function GameBoardRoma() {
             position: "fixed",
             bottom: "20vh",
             right: "10vw",
-            background: "black",
             padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-
-            zIndex: 1000,
+            zIndex: 1001,
           }}
         >
-          <h4>Інформація про карту</h4>
-          <p>
-            <strong>ID:</strong> {inspectedCard.id}
-          </p>
-          <p>
-            <strong>Зміст:</strong> {inspectedCard.content}
-          </p>
-          <p>
-            <strong>Власник:</strong> {inspectedCard.owner}
-          </p>
-          <p>
-            <strong>HP:</strong> {inspectedCard.hp}
-          </p>
-          <p>
-            <strong>Атака:</strong> {inspectedCard.attack}
-          </p>
+          <img
+            src={
+              "echoes-of-darkness-backend/" +
+                inspectedCard.fullData?.imageUrl ?? "/placeholder.png"
+            }
+            className="prev-img"
+          ></img>
+          <span className="stat-1-prev">{inspectedCard.hp}</span>
+          <span className="stat-2-prev">{inspectedCard.attack}</span>
         </div>
       )}
 
@@ -588,6 +630,28 @@ export default function GameBoardRoma() {
       <div className="coin-display player-coins" style={{ bottom: "4.5vh" }}>
         <div className="coin-count">{boardState.coins.Player}</div>
         <img className="coin" src="public/sprites/coin.png"></img>
+      </div>
+      {/* Відбій */}
+      <div className="graveyard-container">
+        <div className="gr-player faded-card">
+          {boardState.graveyard?.Player?.length > 0 && (
+            <CardRoma
+              key={boardState.graveyard.Player.at(-1).id}
+              card={{ ...boardState.graveyard.Player.at(-1), hp: 0 }}
+              className="faded-card"
+            />
+          )}
+        </div>
+
+        <div className="gr-ai faded-card">
+          {boardState.graveyard?.AI?.length > 0 && (
+            <CardRoma
+              key={boardState.graveyard.AI.at(-1).id}
+              card={{ ...boardState.graveyard.AI.at(-1), hp: 0 }}
+              className="faded-card"
+            />
+          )}
+        </div>
       </div>
 
       {/* Вікно магазину */}

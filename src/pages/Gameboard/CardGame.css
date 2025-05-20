@@ -135,9 +135,6 @@ body {
 }
 
 .ai-card {
-  background: #f55555 !important;
-  border: 2px solid #d33;
-  box-shadow: 0px 4px 10px rgba(255, 85, 85, 0.5);
 }
 
 .cards-container {
@@ -200,6 +197,7 @@ body {
   border-radius: 6px;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  z-index: 1000;
 }
 
 .player-info {
@@ -274,6 +272,53 @@ body {
 
 .close-shop-button:hover {
   background-color: #0056b3;
+}
+
+.prev-img {
+  height: 400px;
+  z-index: 1001;
+}
+.stat-1-prev {
+  width: 30px;
+  position: absolute;
+  display: block;
+  font-size: 24px;
+  bottom: 130px;
+  left: 36px;
+}
+
+.stat-2-prev {
+  width: 14px;
+  font-size: 20px !important;
+  position: absolute;
+  display: block;
+  font-size: 14px;
+  bottom: 42px;
+  right: 36px;
+}
+
+.graveyard-container {
+  position: absolute;
+  top: 5vh;
+  height: 90vh;
+  right: 5vw;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-around; /* Рівномірний розподіл */
+  align-content: space-around !important;
+}
+
+.gr-player {
+  order: 1;
+}
+
+.gr-ai {
+  order: -1;
+}
+.faded-card {
+  position: relative;
+  filter: brightness(60%) grayscale(20%);
 }
 
 @keyframes fadeInScale {
