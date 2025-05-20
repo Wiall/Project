@@ -1,12 +1,13 @@
 import React from "react";
+import { API_URL } from "../constants";
 
 export default function CardRoma({ card, onClick }) {
   const isHidden = card.isHidden;
   const imageUrl = isHidden
-    ? "public/sprites/card-back.png" // 🂠 Зображення сорочки карти
-    : "echoes-of-darkness-backend/" +
-      (card.fullData?.imageUrl ?? "placeholder.png");
+    ? "public/sprites/card-back.png" 
+    : API_URL + card.fullData.imageUrl;
 
+    console.log('CARD IMAGE URL: ', card)
   return (
     <div
       className={`cardd ${card.isAiCard ? "ai-card" : ""} ${card.id} ${

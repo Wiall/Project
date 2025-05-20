@@ -13,7 +13,7 @@ const fractions = [
   "Legion of Chaos",
   "Guardians of Nature",
 ];
-
+ 
 export default function DeckBuilderPage() {
   const [decks, setDecks] = useState(() => {
     const saved = localStorage.getItem("deckBuilder_decks");
@@ -94,7 +94,6 @@ export default function DeckBuilderPage() {
     const saved = JSON.parse(
       localStorage.getItem("deckBuilder_activeDeck")
     );
-    console.log("Active deck loaded from storage:", saved);
 
     toast.success(`Deck for "${tab}" saved as active!`);
   }

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import HandAI from "./HandAI";
-import HandRoma from "./HandRoma";
-import CardRoma from "./CardRoma";
-import { PlayerType } from "../bot/BoardState";
-import { getPossibleMoves, evaluateBoard, minimax } from "../bot/aiLogic";
+import HandAI from "./HandAI.jsx";
+import HandRoma from "./HandRoma.jsx";
+import CardRoma from "./CardRoma.jsx";
+import { PlayerType } from "../bot/BoardState.js";
+import { getPossibleMoves, evaluateBoard, minimax } from "../bot/aiLogic.js";
 import { transform } from "typescript";
-
+import { API_URL } from "../constants/index.js"
+import { api } from "../api.js"
+import toast from "react-hot-toast";
 // Створення юніта
 const createUnit = (id, cardData, player) => ({
   id,
@@ -22,6 +24,7 @@ const getRandomCards = (cards, count) => {
 };
 
 export default function GameBoardRoma() {
+  console.log("API URL: ", API_URL)
   const [playerHand, setPlayerHand] = useState([]);
   const [aiHand, setAiHand] = useState([]);
   const [playerDeck, setPlayerDeck] = useState([]);
@@ -42,33 +45,20 @@ export default function GameBoardRoma() {
 
   // Завантаження карт з localStorage та ініціалізація рук
   // 1️⃣ Спочатку тільки зберігаємо decks
-  useEffect(() => {
+    useEffect(() => {
+    const raw = localStorage.getItem("deckBuilder_activeDeck");
+    if (!raw) {
+      console.warn("No active deck in storage");
+      return;
+    }
     try {
-      const storedCards = localStorage.getItem("deckBuilder_decks");
-      if (!storedCards) {
-        console.warn("❌ No decks found in localStorage");
-        return;
-      }
-
-      const parsedCards = JSON.parse(storedCards);
-      if (
-        !Array.isArray(parsedCards) ||
-        parsedCards.length < 2 ||
-        !Array.isArray(parsedCards[0]) ||
-        !Array.isArray(parsedCards[1])
-      ) {
-        console.warn("⚠️ Unexpected format of decks:", parsedCards);
-        return;
-      }
-
-      const [playerDeckRaw, aiDeckRaw] = parsedCards;
-      setPlayerDeck(playerDeckRaw);
-      setAiDeck(aiDeckRaw);
-    } catch (error) {
-      console.error("❌ Error loading cards from localStorage:", error);
+      const { cards } = JSON.parse(raw);
+      setPlayerDeck(cards);
+      setAiDeck(cards);
+    } catch (e) {
+      console.error("Invalid active deck format", e);
     }
   }, []);
-
   // 2️⃣ Коли decks оновились — ініціалізуй руки
   useEffect(() => {
     if (playerDeck.length > 0 && aiDeck.length > 0) {
@@ -177,7 +167,7 @@ export default function GameBoardRoma() {
 
         if (newHealth === 0) {
           setTimeout(() => {
-            alert(`${attacker.isAiCard ? "ШІ" : "Гравець"} переміг!`);
+            toast.success(`${attacker.isAiCard ? "ШІ" : "Гравець"} переміг!`);
           }, 100);
         }
 
@@ -475,10 +465,13 @@ export default function GameBoardRoma() {
 
     if (!gameOver) {
       if (AI <= 0) {
-        alert("Гравець переміг!");
+        toast.success("Гравець переміг!");
+        
+        api.post('/api/match/finish', {result: "WIN"}) 
         setGameOver(true);
       } else if (Player <= 0) {
-        alert("ШІ переміг!");
+        api.post('/api/match/finish', {result: "LOSE"}) 
+        toast.error("ШІ переміг!");
         setGameOver(true);
       }
     }
@@ -562,10 +555,7 @@ export default function GameBoardRoma() {
           }}
         >
           <img
-            src={
-              "echoes-of-darkness-backend/" +
-                inspectedCard.fullData?.imageUrl ?? "/placeholder.png"
-            }
+            src={`${API_URL}${inspectedCard.fullData.imageUrl}`}
             className="prev-img"
           ></img>
           <span className="stat-1-prev">{inspectedCard.hp}</span>

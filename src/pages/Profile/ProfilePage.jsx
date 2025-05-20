@@ -99,7 +99,15 @@ export default function ProfilePage() {
           <div className="profile-xp">
             <span className="level-pulse">Level {user.level}</span>
             <div className="xp-bar">
-              <div className="xp-fill">
+              <div
+                className="xp-fill"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    Math.round((user.experienceCurrent / user.experienceToNext) * 100)
+                  )}%`,
+                }}
+              >
                 <div className="xp-shine"></div>
               </div>
             </div>
