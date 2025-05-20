@@ -1,4 +1,4 @@
-import './index.css'
+import "./index.css";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import About from "./pages/About/About";
@@ -14,39 +14,54 @@ import { ForgotPasswordPage } from "./pages/Auth/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/Auth/ResetPasswordPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import { PrivateRoute } from "./components/Auth/PrivateRoute";
-
-
+import BackgroundMusic from "./components/BackgroundMusic";
 
 function App() {
   return (
     <Router>
+      <BackgroundMusic />
       <AuthProvider>
         <Routes>
-          <Route path="/game-room" element={
-            <PrivateRoute>
-              <GameBoardLayout />
-            </PrivateRoute>
-          } />
-          <Route path="/game-page" element={
-            <PrivateRoute>
-              <PlayerHomePage />
-            </PrivateRoute>
-          } />
-          <Route path="/game-deck" element={
-            <PrivateRoute>
-              <DeckBuilderPage />
-            </PrivateRoute>
-          } />
-          <Route path="/profile" element={
-            <PrivateRoute>
-              <ProfilePage />
-            </PrivateRoute>
-          } />
-          <Route path="/shop" element={
-            <PrivateRoute>
-              <ShopPage />
-            </PrivateRoute>
-          } />
+          <Route
+            path="/game-room"
+            element={
+              <PrivateRoute>
+                <GameBoardLayout />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/game-page"
+            element={
+              <PrivateRoute>
+                <PlayerHomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/game-deck"
+            element={
+              <PrivateRoute>
+                <DeckBuilderPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <PrivateRoute>
+                <ShopPage />
+              </PrivateRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterPage />} />
