@@ -81,7 +81,7 @@ body {
   transform-origin: center center;
   width: 100px;
   height: 136px;
-  background-color: #f8b400;
+  /* background-color: #f8b400; */
   border-radius: 8px;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
   font-size: 2rem;
@@ -101,19 +101,22 @@ body {
 }
 
 .stat-1 {
+  width: 24px;
   position: absolute;
   display: block;
   font-size: 12px;
-  bottom: 34px;
-  left: 7.5px;
+  bottom: 27px;
+  left: 0.5px;
 }
 
 .stat-2 {
+  width: 14px;
+  font-size: 8px !important;
   position: absolute;
   display: block;
   font-size: 10px;
-  bottom: 0px;
-  right: 5.5px;
+  bottom: -8px;
+  right: 2px;
 }
 
 .card-id {
@@ -254,7 +257,7 @@ body {
 }
 
 .card-price {
-  margin-top: 100px;
+  margin-top: 140px;
   transform: scale(2.2);
   font-weight: bold;
   color: goldenrod;

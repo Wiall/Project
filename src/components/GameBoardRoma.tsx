@@ -1,71 +1,119 @@
-import React, { useState, useEffect } from "react"; // вже є
+import React, { useState, useEffect } from "react";
 import HandAI from "./HandAI";
 import HandRoma from "./HandRoma";
 import CardRoma from "./CardRoma";
 import { PlayerType } from "../bot/BoardState";
 import { getPossibleMoves, evaluateBoard, minimax } from "../bot/aiLogic";
 
-// Тип Unit (якщо не TypeScript, просто залишаємо як JS-обʼєкт)
-const createUnit = (id, content, player, hp = 10, attack = 3) => ({
+// Створення юніта
+const createUnit = (id, cardData, player) => ({
   id,
-  content,
+  content: cardData.name,
   owner: player,
-  hp,
-  attack,
+  hp: cardData.health,
+  attack: cardData.strength,
+  fullData: cardData, // зберігаємо всю інформацію
 });
 
-// Ініціалізація початкового стану
-const initialBoardState = {
-  hands: {
-    AI: [
-      createUnit("card-1AI", "card-1", "AI", 8, 2),
-      createUnit("card-2AI", "card-2", "AI", 10, 3),
-      createUnit("card-3AI", "card-3", "AI", 12, 4),
-      createUnit("card-4AI", "card-4", "AI", 15, 1),
-      createUnit("card-5AI", "card-5", "AI", 6, 5),
-    ],
-    Player: [
-      createUnit("card-1", "card-1", "Player", 10, 3),
-      createUnit("card-2", "card-2", "Player", 9, 4),
-      createUnit("card-3", "card-3", "Player", 7, 5),
-      createUnit("card-4", "card-4", "Player", 12, 2),
-    ],
-  },
-  rows: {
-    AI_FRONT: [],
-    AI_BACK: [],
-    PLAYER_MID: [],
-    PLAYER_REAR: [],
-  },
-  coins: {
-    AI: 10,
-    Player: 10,
-  },
-  health: {
-    AI: 30,
-    Player: 30,
-  },
-  currentTurn: "Player",
-  turnCount: 0,
+const getRandomCards = (cards, count) => {
+  const shuffled = [...cards].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 };
 
 export default function GameBoardRoma() {
-  const [boardState, setBoardState] = useState(() => ({
-    ...initialBoardState,
-    currentTurn: "Player",
-    hasPlayedCardThisTurn: false,
-    usedCardsThisTurn: new Set(),
-  }));
+  const [playerHand, setPlayerHand] = useState([]);
+  const [aiHand, setAiHand] = useState([]);
+  const [playerDeck, setPlayerDeck] = useState([]);
+  const [aiDeck, setAiDeck] = useState([]);
 
+  const [cardsLoaded, setCardsLoaded] = useState(false);
+
+  const [boardState, setBoardState] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [playerCoins, setPlayerCoins] = useState(10);
   const [inspectedCard, setInspectedCard] = useState(null);
 
+  const [playerCoins, setPlayerCoins] = useState(10);
   const [aiCoins, setAiCoins] = useState(10);
   const [gameOver, setGameOver] = useState(false);
 
-  const [shopVisible, setShopVisible] = useState(false); // Додано стан для відображення магазину
-  const [shopCards, setShopCards] = useState([]); // Массив карт магазину
+  const [shopVisible, setShopVisible] = useState(false);
+  const [shopCards, setShopCards] = useState([]);
+
+  // Завантаження карт з localStorage та ініціалізація рук
+  // 1️⃣ Спочатку тільки зберігаємо decks
+  useEffect(() => {
+    try {
+      const storedCards = localStorage.getItem("deckBuilder_decks");
+      if (!storedCards) {
+        console.warn("❌ No decks found in localStorage");
+        return;
+      }
+
+      const parsedCards = JSON.parse(storedCards);
+      if (
+        !Array.isArray(parsedCards) ||
+        parsedCards.length < 2 ||
+        !Array.isArray(parsedCards[0]) ||
+        !Array.isArray(parsedCards[1])
+      ) {
+        console.warn("⚠️ Unexpected format of decks:", parsedCards);
+        return;
+      }
+
+      const [playerDeckRaw, aiDeckRaw] = parsedCards;
+      setPlayerDeck(playerDeckRaw);
+      setAiDeck(aiDeckRaw);
+    } catch (error) {
+      console.error("❌ Error loading cards from localStorage:", error);
+    }
+  }, []);
+
+  // 2️⃣ Коли decks оновились — ініціалізуй руки
+  useEffect(() => {
+    if (playerDeck.length > 0 && aiDeck.length > 0) {
+      const playerInitialHand = getRandomCards(playerDeck, 5).map(
+        (card, index) => createUnit(`player-${index}`, card, "Player")
+      );
+
+      const aiInitialHand = getRandomCards(aiDeck, 5).map((card, index) =>
+        createUnit(`ai-${index}`, card, "AI")
+      );
+
+      setPlayerHand(playerInitialHand);
+      setAiHand(aiInitialHand);
+      setCardsLoaded(true); // <- тепер тут
+    }
+  }, [playerDeck, aiDeck]);
+
+  // 3️⃣ Коли руки готові — ініціалізуй boardState
+  useEffect(() => {
+    if (cardsLoaded && playerHand.length > 0 && aiHand.length > 0) {
+      setBoardState({
+        hands: {
+          AI: aiHand,
+          Player: playerHand,
+        },
+        rows: {
+          AI_FRONT: [],
+          AI_BACK: [],
+          PLAYER_MID: [],
+          PLAYER_REAR: [],
+        },
+        coins: {
+          AI: 10,
+          Player: 10,
+        },
+        health: {
+          AI: 30,
+          Player: 30,
+        },
+        currentTurn: "Player",
+        turnCount: 0,
+        hasPlayedCardThisTurn: false,
+        usedCardsThisTurn: new Set(),
+      });
+    }
+  }, [cardsLoaded, playerHand, aiHand]);
 
   const handleCardClick = (card) => {
     if (inspectedCard?.id === card.id) {
@@ -189,6 +237,8 @@ export default function GameBoardRoma() {
 
   function handleEndTurn() {
     if (boardState.currentTurn === "Player") {
+      const nextTurnCount = boardState.turnCount + 1;
+
       setBoardState((prev) => ({
         ...prev,
         currentTurn: "AI",
@@ -196,33 +246,49 @@ export default function GameBoardRoma() {
           ...prev.coins,
           Player: prev.coins.Player + 5,
         },
-        turnCount: prev.turnCount + 1,
+        turnCount: nextTurnCount,
       }));
 
-      const timer = setTimeout(() => {
-        if (boardState.turnCount % 6 === 0 && boardState.turnCount !== 0) {
+      setTimeout(() => {
+        if (boardState.turnCount % 6 === 0) {
           openShop();
         }
       }, 2000);
     }
   }
-  useEffect(() => {
-    if (boardState.currentTurn === "AI") {
-      const timer = setTimeout(() => {
-        playAiMove();
-      }, 1000); // 1 секунда "роздумів"
 
-      return () => clearTimeout(timer); // при зміні currentTurn очищаємо таймер
-    }
-  }, [boardState.currentTurn]);
+  useEffect(() => {
+    if (!boardState || boardState.currentTurn !== "AI") return;
+
+    const timer = setTimeout(() => {
+      playAiMove();
+    }, 1000); // 1 секунда "роздумів"
+
+    return () => clearTimeout(timer); // при зміні currentTurn очищаємо таймер
+  }, [boardState]);
 
   const openShop = () => {
-    // Генерація 3 випадкових карт для магазину
-    const newShopCards = [
-      createUnit("shop-card-1", "card-1", "Shop", 8, 2),
-      createUnit("shop-card-2", "card-2", "Shop", 10, 3),
-      createUnit("shop-card-3", "card-3", "Shop", 12, 4),
-    ];
+    // Збираємо всі ID карт, які вже використані (у руках або магазині)
+    const usedCardIds = new Set([
+      ...boardState.hands.Player.map((c) => c.fullData.id),
+      ...boardState.hands.AI.map((c) => c.fullData.id),
+      ...shopCards.map((c) => c.fullData.id),
+    ]);
+
+    // Фільтруємо ті, що ще не використані
+    const availableCards = playerDeck.filter(
+      (card) => !usedCardIds.has(card.id)
+    );
+
+    // Перемішати і взяти 3 випадкові
+    const shuffled = availableCards.sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 3);
+
+    // Створюємо unit'и для магазину
+    const newShopCards = selected.map((card, index) =>
+      createUnit(`shop-card-${index}`, card, "Shop")
+    );
+
     setShopCards(newShopCards);
     setShopVisible(true);
   };
@@ -233,10 +299,9 @@ export default function GameBoardRoma() {
       return;
     }
 
-    // Створюємо копію карти з оновленим власником та новим ID
     const newCard = {
       ...card,
-      id: `${card.content}-${Date.now()}`, // унікальний ID, щоб уникнути конфліктів
+      id: `${card.fullData.id}-${Date.now()}`, // Унікальний ID
       owner: "Player",
     };
 
@@ -244,15 +309,16 @@ export default function GameBoardRoma() {
       ...prev,
       coins: {
         ...prev.coins,
-        Player: prev.coins.Player - 5, // Вартість карти
+        Player: prev.coins.Player - 5,
       },
       hands: {
         ...prev.hands,
-        Player: [...prev.hands.Player, newCard], // Додаємо оновлену карту
+        Player: [...prev.hands.Player, newCard],
       },
     }));
 
-    setShopVisible(false); // Закриваємо магазин
+    // Видаляємо куплену карту з магазину
+    setShopCards((prev) => prev.filter((c) => c.id !== card.id));
   };
 
   const handleCloseShop = () => {
@@ -350,6 +416,8 @@ export default function GameBoardRoma() {
     console.log("Selected card:", selectedCard);
   }, [boardState, selectedCard]);
   useEffect(() => {
+    if (!boardState) return;
+
     const { AI, Player } = boardState.health;
 
     if (!gameOver) {
@@ -361,8 +429,12 @@ export default function GameBoardRoma() {
         setGameOver(true);
       }
     }
-  }, [boardState.health, gameOver]);
+  }, [boardState, gameOver]);
 
+  if (!boardState) {
+    console.warn("boardState is not init");
+    return <div>Завантаження гри...</div>;
+  }
   return (
     <div className="game-container">
       <div className="player-info">
