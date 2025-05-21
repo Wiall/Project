@@ -1,32 +1,23 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
+import { useAudio } from "../providers/AudioProvider";
 
 const BackgroundMusic = () => {
-  const audioRef = useRef(null);
+  const { isPlaying, togglePlay, volume, changeVolume } = useAudio();
 
-  useEffect(() => {
-    const playAudio = () => {
-      if (audioRef.current) {
-        audioRef.current.play().catch(() => {
-          console.log(
-            "Автовідтворення заблоковано браузером. Натисніть кнопку для старту."
-          );
-        });
-      }
-    };
-
-    // Перевіряємо, чи був звук увімкнений перед перезавантаженням
-    if (localStorage.getItem("musicPlaying") === "true") {
-      playAudio();
-    }
-
-    document.addEventListener("click", playAudio); // Включаємо звук при кліку
-
-    return () => {
-      document.removeEventListener("click", playAudio); // Очищаємо подію
-    };
-  }, []);
-
-  return <audio ref={audioRef} src="/sprites/sounds/sound.mp3" autoPlay loop />;
+  return (
+    <div style={{ position: "fixed", top: 10, right: 10, zIndex: 1000 }}>
+      <button onClick={togglePlay}>{isPlaying ? "🔇" : "🔊"}</button>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value={volume}
+        onChange={(e) => changeVolume(parseFloat(e.target.value))}
+        style={{ marginLeft: "10px" }}
+      />
+    </div>
+  );
 };
 
 export default BackgroundMusic;

@@ -15,61 +15,64 @@ import { ResetPasswordPage } from "./pages/Auth/ResetPasswordPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import { PrivateRoute } from "./components/Auth/PrivateRoute";
 import BackgroundMusic from "./components/BackgroundMusic";
+import { AudioProvider } from "./providers/AudioProvider";
 
 function App() {
   return (
     <Router>
-      <BackgroundMusic />
-      <AuthProvider>
-        <Routes>
-          <Route
-            path="/game-room"
-            element={
-              <PrivateRoute>
-                <GameBoardLayout />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/game-page"
-            element={
-              <PrivateRoute>
-                <PlayerHomePage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/game-deck"
-            element={
-              <PrivateRoute>
-                <DeckBuilderPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <ProfilePage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/shop"
-            element={
-              <PrivateRoute>
-                <ShopPage />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/about" element={<About />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-        </Routes>
-      </AuthProvider>
+      <AudioProvider>
+        <BackgroundMusic />
+        <AuthProvider>
+          <Routes>
+            <Route
+              path="/game-room"
+              element={
+                <PrivateRoute>
+                  <GameBoardLayout />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/game-page"
+              element={
+                <PrivateRoute>
+                  <PlayerHomePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/game-deck"
+              element={
+                <PrivateRoute>
+                  <DeckBuilderPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/shop"
+              element={
+                <PrivateRoute>
+                  <ShopPage />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+          </Routes>
+        </AuthProvider>
+      </AudioProvider>
     </Router>
   );
 }

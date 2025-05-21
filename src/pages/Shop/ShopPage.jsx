@@ -5,7 +5,6 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { api } from "../../api";
 import toast from "react-hot-toast";
 
-
 export default function ShopPage() {
   const { user } = useContext(AuthContext);
   const [gold, setGold] = useState(user.currencyBalance);
@@ -14,11 +13,9 @@ export default function ShopPage() {
   const [modalType, setModalType] = useState("info");
   const [selectedPack, setSelectedPack] = useState(null);
 
-
   const [isOpening, setIsOpening] = useState(false);
   const [showMagic, setShowMagic] = useState(false);
-  const [drop, setDrop] = useState(null)
-
+  const [drop, setDrop] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -28,7 +25,6 @@ export default function ShopPage() {
   }, []);
 
   async function handleInfo(pack) {
-
     setSelectedPack(pack);
     setModalType("info");
     setShowModal(true);
@@ -37,12 +33,12 @@ export default function ShopPage() {
       const res = await api.get(`/api/container/${pack.id}/drops`);
       console.log(res.data);
       setDrop(res.data);
-    } catch (err) { }
+    } catch (err) {}
   }
 
   function handleBuy(pack) {
     if (gold < pack.price) {
-      return toast.error('Not enough gold!')
+      return toast.error("Not enough gold!");
     }
 
     setGold((g) => g - pack.price);
@@ -63,7 +59,7 @@ export default function ShopPage() {
     setShowModal(false);
     setIsOpening(false);
     setShowMagic(false);
-    setDrop(null)
+    setDrop(null);
   }
 
   return (
@@ -100,11 +96,7 @@ export default function ShopPage() {
               <h3>{pack.name}</h3>
               <p>{pack.description}</p>
               <div className="price">
-                <img
-                  src="/sprites/coin.png"
-                  alt="coin"
-                  className="coin-icon"
-                />{" "}
+                <img src="/sprites/coin.png" alt="coin" className="coin-icon" />{" "}
                 {pack.price}
               </div>
               <button className="buy-btn" onClick={() => handleBuy(pack)}>
@@ -116,18 +108,14 @@ export default function ShopPage() {
 
         {showModal && (
           <div className="modal-backdrop" onClick={closeModal}>
-            <div
-              className="modal"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
               {modalType === "info" && selectedPack && (
                 <>
                   <h2 className="modal-title">Drop Chances</h2>
                   <ul className="drop-list">
                     {drop.map((d) => (
                       <li key={d.cardId}>
-                        <strong>{d.card.name}:</strong>{" "}
-                        {d?.dropChancePct}%
+                        <strong>{d.card.name}:</strong> {d?.dropChancePct}%
                       </li>
                     ))}
                   </ul>
@@ -144,29 +132,20 @@ export default function ShopPage() {
                       <p>Opening Pack...</p>
                     </div>
                   )}
-                  {showMagic && (
-                    <div className="magic-explosion"></div>
-                  )}
+                  {showMagic && <div className="magic-explosion"></div>}
 
                   {drop && (
                     <div className="single-card-drop">
                       <img
-                        src={`http://localhost:3000${drop.imageUrl}`}
+                        src={`https://echowisp.codecrafters.website${drop.imageUrl}`}
                         alt={drop.name}
                         width={200}
                         className="drop-card-image"
                       />
-                      <p
-                        className={`rarity-text ${
-                          drop.type.toLowerCase()
-                        }`}
-                      >
+                      <p className={`rarity-text ${drop.type.toLowerCase()}`}>
                         {drop.name}
                       </p>
-                      <button
-                        className="next-btn"
-                        onClick={closeModal}
-                      >
+                      <button className="next-btn" onClick={closeModal}>
                         Close
                       </button>
                     </div>
