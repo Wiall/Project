@@ -137,7 +137,7 @@ export default function ShopPage() {
                   {drop && (
                     <div className="single-card-drop">
                       <img
-                        src={`https://echowisp.codecrafters.website${drop.imageUrl}`}
+                        src={`https://localhost:3000${drop.imageUrl}`}
                         alt={drop.name}
                         width={200}
                         className="drop-card-image"

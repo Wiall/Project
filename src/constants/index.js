@@ -1,1 +1,1 @@
-export const API_URL = "https://echowisp.codecrafters.website";
+export const API_URL = "http://localhost:3000";

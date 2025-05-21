@@ -16,9 +16,10 @@ export const AudioProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(
     () => localStorage.getItem("musicPlaying") === "true"
   );
+
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem("musicVolume");
-    return savedVolume !== null ? parseFloat(savedVolume) : 1;
+    return savedVolume !== null ? parseFloat(savedVolume) : 0.3; // ← дефолтне значення тут
   });
 
   useEffect(() => {
