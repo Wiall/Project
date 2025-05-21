@@ -4,6 +4,7 @@ import Header from "../../components/Header/Header";
 import { AuthContext } from "../../providers/AuthProvider";
 import { api } from "../../api";
 import toast from "react-hot-toast";
+import { API_URL } from "../../constants";
 
 
 export default function ShopPage() {
@@ -86,7 +87,7 @@ export default function ShopPage() {
             <div key={pack.id} className="product-card">
               <div className="product-top">
                 <img
-                  src="/sprites/cards/sun_paladin.png"
+                  src="/sprites/starter-pack.png"
                   alt={pack.name}
                   className="product-image"
                 />
@@ -151,7 +152,7 @@ export default function ShopPage() {
                   {drop && (
                     <div className="single-card-drop">
                       <img
-                        src={`http://localhost:3000${drop.imageUrl}`}
+                        src={`${API_URL}${drop.imageUrl}`}
                         alt={drop.name}
                         width={200}
                         className="drop-card-image"
